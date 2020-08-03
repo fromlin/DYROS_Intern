@@ -11,7 +11,7 @@ Dyros Internship
 >	> + Write a script 'auto_run.sh' to run the service.     
 ```
 cd /etc/init.d/
-vi auto_run.sh
+vi xbox_auto.sh
 ```     
 <br/><br/>
 
@@ -19,7 +19,7 @@ vi auto_run.sh
 
 >	> + Give permission.     
 ```
-chmod 777 auto_run.sh
+chmod 777 xbox_auto.sh
 ```     
 <br/><br/>
 
@@ -38,7 +38,7 @@ exit 0
 
 >	> + Register service.     
 ```
-update-rc.d auto_run.sh defaults
+update-rc.d xbox_auto.sh defaults
 ```     
 <br/><br/>
 
