@@ -1246,24 +1246,23 @@ Window {
                 text: qsTr("R1")
                 objectName: "b5"
             }
-
+            
             Button {
                 id: b7
-                x: 82
-                y: 6
-                width: 55
-                height: 25
-                text: qsTr("R2")
-                objectName: "b6"
-            }
-
-            Button {
-                id: b8
                 x: 6
                 y: 6
                 width: 55
                 height: 25
                 text: qsTr("L2")
+                objectName: "b6"
+            }
+            Button {
+                id: b8
+                x: 82
+                y: 6
+                width: 55
+                height: 25
+                text: qsTr("R2")
                 objectName: "b7"
             }
 
