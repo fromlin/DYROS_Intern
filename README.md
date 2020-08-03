@@ -11,15 +11,7 @@ Dyros Internship
 >	> + Write a script 'auto_run.sh' to run the service.     
 ```
 cd /etc/init.d/
-vi xbox_auto.sh
-```     
-<br/><br/>
-
-
-
->	> + Give permission.     
-```
-chmod 777 xbox_auto.sh
+sudo vi xbox_auto.sh
 ```     
 <br/><br/>
 
@@ -32,6 +24,14 @@ chmod 777 xbox_auto.sh
 sudo xboxdrv --silent
 exit 0
 ```
+<br/><br/>
+
+
+
+>	> + Give permission.     
+```
+chmod 777 xbox_auto.sh
+```     
 <br/><br/>
 
 
