@@ -16,7 +16,9 @@ void call_back(const std_msgs::String::ConstPtr& msg){
     // printf("%s\n", msg->data.c_str());
 }
 void com_callback(const tocabi_controller::TaskCommand& msg){
-    printf(" %lf  \t%lf\n", msg.roll, msg.pitch);
+    printf(" ratio:%.1lf\theight:%.2lf\t  \
+    time:%.lf\tmode:%d\n pitch:%.3lf\tyaw:%.3lf\n",
+    msg.ratio, msg.height, msg.time, msg.mode, msg.pitch, msg.yaw);
 }
 
 int main(int argc, char **argv)

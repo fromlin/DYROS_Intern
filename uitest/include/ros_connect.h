@@ -260,17 +260,30 @@ public:
             else
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
-        TaskHandle(msg);
+
+        cnt_pub++;
+        // joystick command transfer to mujoco_sim
+        if(cnt_pub == 100){
+            TaskHandle(msg);
+            cnt_pub = 0;
+        }
     };
 
     void TaskHandle(const sensor_msgs::Joy::ConstPtr &msg)
     {
-        task_msg.roll = msg->axes[0];
-        task_msg.pitch = msg->axes[1];
+        // if(msg->buttons[7])
+        // double dot_=msg->axes[0];
+        task_msg.ratio = 0.5;
+        task_msg.height = 0.85;
+        task_msg.time = 1.;
+        task_msg.mode = 2;
+        task_msg.pitch = ((double)msg->axes[0])*20.;
+        task_msg.yaw = ((double)msg->axes[1])*20.;
 
         task_pub.publish(task_msg);
     }
 
+    int cnt_pub = 0;
     sensor_msgs::JointState state;
 
     ros::Subscriber joint_sub;
