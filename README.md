@@ -8,10 +8,18 @@ Dyros Internship
 
 
 > ### Automatically run when booting the joystick.    
+> > + Switch to the root account.
+```
+su
+```
+<br/><br/>
+
+
+
 >	> + Write a script 'auto_run.sh' to run the service.     
 ```
 cd /etc/init.d/
-sudo vi xbox_auto.sh
+vi xbox_auto.sh
 ```     
 <br/><br/>
 
