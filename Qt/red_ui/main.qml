@@ -1,6 +1,6 @@
-import QtQuick 2.9
-import QtQuick.Window 2.3
-import QtQuick.Controls 2.2
+import QtQuick 2.14
+import QtQuick.Window 2.14
+import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
 import QtQml 2.2
 
@@ -1246,7 +1246,7 @@ Window {
                 text: qsTr("R1")
                 objectName: "b5"
             }
-            
+
             Button {
                 id: b7
                 x: 6
@@ -1472,3 +1472,9 @@ Window {
     }
 
 }
+
+/*##^##
+Designer {
+    D{i:129;anchors_x:"-7"}D{i:148;anchors_x:"-7"}D{i:154;anchors_x:"-7"}
+}
+##^##*/
