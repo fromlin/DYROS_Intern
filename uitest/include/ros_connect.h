@@ -37,6 +37,7 @@ public:
         pos_sub = nh.subscribe("/tocabi/point", 1, &ros_connect::pos_cb, this);
         tt = 0;
 
+        state_pub = nh.advertise<std_msgs::String>("/tocabi/command", 100);
         task_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
 
         joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);
@@ -202,6 +203,8 @@ public:
 
     void joystick_cb(const sensor_msgs::Joy::ConstPtr &msg)
     {
+        if(msg->buttons[0])         StateHandle();
+            
         char buf[128];
         char buf2[128];
 
@@ -260,19 +263,25 @@ public:
             else
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
-
+         
         cnt_pub++;
         // joystick command transfer to mujoco_sim
-        if(cnt_pub == 100){
+        if(cnt_pub == 50){
             TaskHandle(msg);
             cnt_pub = 0;
         }
     };
 
+    void StateHandle(){
+        com_msg.data = std::string("simvirtualjoint");
+        state_pub.publish(com_msg);
+    }
+
     void TaskHandle(const sensor_msgs::Joy::ConstPtr &msg)
     {
         // if(msg->buttons[7])
         // double dot_=msg->axes[0];
+        
         task_msg.ratio = 0.5;
         task_msg.height = 0.85;
         task_msg.time = 1.;
@@ -292,6 +301,7 @@ public:
     ros::Subscriber pos_sub;
     ros::Publisher command_pub;
 
+    ros::Publisher state_pub;
     ros::Publisher task_pub;
     ros::Publisher button_pub;
     ros::Publisher switch_pub;
@@ -307,6 +317,7 @@ public:
 
     ros::Subscriber joystick_sub;
     tocabi_controller::TaskCommand task_msg;
+    std_msgs::String com_msg;
 
 protected:
     QObject *m_Q;

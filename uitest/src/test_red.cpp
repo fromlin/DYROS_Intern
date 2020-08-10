@@ -15,6 +15,9 @@ void callback(const sensor_msgs::Joy::ConstPtr& msg){
 void call_back(const std_msgs::String::ConstPtr& msg){
     // printf("%s\n", msg->data.c_str());
 }
+void status_callback(const std_msgs::StringConstPtr& msg){
+    printf("%s\n", msg->data.c_str());
+}
 void com_callback(const tocabi_controller::TaskCommand& msg){
     printf(" ratio:%.1lf\theight:%.2lf\t  \
     time:%.lf\tmode:%d\n pitch:%.3lf\tyaw:%.3lf\n",
@@ -26,6 +29,7 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "test_red_node");
     ros::NodeHandle nh;
 
+    ros::Subscriber subbbb = nh.subscribe("/tocabi/command", 100, &status_callback);
     ros::Subscriber subbb = nh.subscribe("/tocabi/taskcommand", 1, &com_callback);
     ros::Subscriber subb = nh.subscribe("/controller/red_command", 1, &callback);
     ros::Subscriber sub = nh. subscribe("/dyros_red/command", 1, &call_back);
