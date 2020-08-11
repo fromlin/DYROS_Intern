@@ -7,7 +7,7 @@
 #include "SensorState.h"
 #include "Joy.h"
 #include "TaskCommand.h"
-
+#include "geometry_msgs/Twist.h"
 #include <QObject>
 #include <QPoint>
 #include <QDebug>
@@ -18,7 +18,7 @@
 #include <geometry_msgs/Point32.h>
 #include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/PolygonStamped.h>
-
+#include <math.h>
 #define min(x, y) (((x) < (y)) ? (x) : (y))
 #define max(x, y) (((x) > (y)) ? (x) : (y))
 
@@ -38,8 +38,10 @@ public:
         tt = 0;
 
         task_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
+        android_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
 
         joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);
+        android_sub  =  nh.subscribe("/controller/android_command", 1 , &ros_connect::android_cb,this);
 
         char buf[128];
         char buf2[128];
@@ -269,6 +271,42 @@ public:
         }
     };
 
+    void android_cb(const geometry_msgs::Twist::ConstPtr &msg)
+    {
+        char buf[128];
+        char buf2[128];
+        float temp[2];
+        temp[0] = msg->linear.x;
+        temp[1] = msg->angular.z;
+        //temp[2] = msg->linear.z;
+
+        //geometry_msgs::Vector3 an = msg->linear;
+        for (int i = 0; i < 2; i++)
+        {
+            float dot = (temp[i])*pow(-1, i) * 100;
+            //for (int i = 0; i < 4; i++)
+        
+            //float dot = (msg->axes[i]) * 100.0;
+            std::sprintf(buf, "%8.3f", dot);
+            std::sprintf(buf2, "t%d", i +46);
+            m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
+
+            std::sprintf(buf, "#%02X0000", (int)(pp(dot) * 256.0));
+            m_Q->findChild<QObject *>(buf2)->setProperty("color", buf);
+
+            std::sprintf(buf2, "p%d", i + 44);
+            m_Q->findChild<QObject *>(buf2)->setProperty("value", dot / 200.0 + 0.5);
+        }
+            cnt_pub++;
+         //joystick command transfer to mujoco_sim
+         if(cnt_pub == 100){
+           TaskHandle_android(msg);
+           cnt_pub = 0;
+         }
+       
+    }
+
+
     void TaskHandle(const sensor_msgs::Joy::ConstPtr &msg)
     {
         // if(msg->buttons[7])
@@ -283,6 +321,18 @@ public:
         task_pub.publish(task_msg);
     }
 
+    void TaskHandle_android(const geometry_msgs::Twist::ConstPtr &msg)
+    {
+        task_msg.ratio = 0.5;
+        task_msg.height = 0.85;
+        task_msg.time = 1.;
+        task_msg.mode = 2;
+        task_msg.pitch = ((double)msg->angular.z)*20.;
+        task_msg.yaw = ((double)msg->linear.x)*20.;
+
+        task_pub.publish(task_msg);
+    }
+
     int cnt_pub = 0;
     sensor_msgs::JointState state;
 
@@ -293,6 +343,7 @@ public:
     ros::Publisher command_pub;
 
     ros::Publisher task_pub;
+    ros::Publisher android_pub;
     ros::Publisher button_pub;
     ros::Publisher switch_pub;
 
@@ -306,6 +357,7 @@ public:
     };
 
     ros::Subscriber joystick_sub;
+    ros::Subscriber android_sub;
     tocabi_controller::TaskCommand task_msg;
 
 protected:
