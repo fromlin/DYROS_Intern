@@ -58,3 +58,10 @@ reboot
 ```
 <br/><br/>
 
+
+>	> + To connect the Android Smartphone with ROSCORE(Computer),     
+```
+Joystick Topic in app have to be edited to '/controller/android_command' 
+```
+<br/><br/>
+
