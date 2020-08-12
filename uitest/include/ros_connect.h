@@ -42,7 +42,7 @@ public:
         pos_sub = nh.subscribe("/tocabi/point", 1, &ros_connect::pos_cb, this);
         tt = 0;
 
-        joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);\
+        joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);
 
         com_pub = nh.advertise<std_msgs::String>("/tocabi/command", 100);
         task_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
