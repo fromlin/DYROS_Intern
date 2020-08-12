@@ -293,10 +293,10 @@ public:
     }
     void TaskHandle()
     {
-        // task_msg.ratio = 0.5;
-        // task_msg.height = 0.85;
-        // task_msg.time = 1.;
-        task_msg.mode = 5;                       // ??????????
+        task_msg.ratio = 0.5;
+        task_msg.height = 0.85;
+        task_msg.time = 1.;
+        task_msg.mode = 9;
         
         task_pub.publish(task_msg);
     }
