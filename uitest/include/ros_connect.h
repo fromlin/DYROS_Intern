@@ -9,7 +9,6 @@
 #include "TaskCommand.h"
 
 #include "geometry_msgs/Twist.h"
-
 #include "VelocityCommand.h"
 
 
@@ -43,14 +42,13 @@ public:
         pos_sub = nh.subscribe("/tocabi/point", 1, &ros_connect::pos_cb, this);
         tt = 0;
 
+        joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);\
+
         com_pub = nh.advertise<std_msgs::String>("/tocabi/command", 100);
-        velcommand_pub = nh.advertise<tocabi_controller::VelocityCommand>("/tocabi/velcommand", 100);
         task_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
+        velcommand_pub = nh.advertise<tocabi_controller::VelocityCommand>("/tocabi/velcommand", 100);
+
         android_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
-        vel_pub = nh.advertise<tocabi_controller::VelocityCommand>("/tocabi/velcommand",100);
-
-
-        joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);
         android_sub  =  nh.subscribe("/controller/android_command", 1 , &ros_connect::android_cb,this);
 
         char buf[128];
@@ -212,6 +210,10 @@ public:
         m_Q->findChild<QObject *>("com1")->setProperty("y", x);
     };
 
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
     void joystick_cb(const sensor_msgs::Joy::ConstPtr &msg)
     {
         char buf[128];
@@ -308,27 +310,18 @@ public:
             std::sprintf(buf2, "p%d", i + 44);
             m_Q->findChild<QObject *>(buf2)->setProperty("value", dot / 200.0 + 0.5);
         }
-            cnt_pub++;
+
         VelHandle_android(msg);
-         //joystick command transfer to mujoco_sim
-        //  if(cnt_pub == 100){
-        //    TaskHandle_android(msg);
-        //    cnt_pub = 0;
-        //  }
-       
     }
 
-
-    void TaskHandle(const sensor_msgs::Joy::ConstPtr &msg){}
-
-//////////////////////////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////////////////////////////////////////////
 
     void StateInitHandle()
     {
         com_msg.data = std::string("stateestimation");
         com_pub.publish(com_msg);
     }
+
     void VelocityHandle(const sensor_msgs::Joy::ConstPtr& msg)
     {
         velcmd_msg.des_vel.resize(6);
@@ -337,6 +330,7 @@ public:
 
         velcommand_pub.publish(velcmd_msg);
     }
+
     void TaskHandle()
     {
         task_msg.ratio = 0.5;
@@ -346,7 +340,6 @@ public:
         
         task_pub.publish(task_msg);
     }
-
 
     void TaskHandle_android(const geometry_msgs::Twist::ConstPtr &msg)
     {
@@ -362,32 +355,40 @@ public:
     }
 
     void VelHandle_android(const geometry_msgs::Twist::ConstPtr &msg){
-        vel_msg.des_vel.resize(6);
-        vel_msg.des_vel[0] = -1 * ((double)msg->angular.z / 4.);
-        vel_msg.des_vel[1] = (double)msg->linear.x / 4.;
+        velcmd_msg.des_vel.resize(6);
+        velcmd_msg.des_vel[0] = -1 * ((double)msg->angular.z / 4.);
+        velcmd_msg.des_vel[1] = (double)msg->linear.x / 4.;
 
-        vel_pub.publish(vel_msg);
+        velcommand_pub.publish(velcmd_msg);
 
     }
-//////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    int cnt_pub = 0;
     sensor_msgs::JointState state;
-
     ros::Subscriber joint_sub;
     ros::Subscriber time_sub;
     ros::Subscriber sensor_sub;
     ros::Subscriber pos_sub;
-    ros::Publisher command_pub;
-
-    ros::Publisher com_pub;
-    ros::Publisher velcommand_pub;
-    ros::Publisher task_pub;
-    ros::Publisher android_pub;
     ros::Publisher button_pub;
     ros::Publisher switch_pub;
-    ros::Publisher vel_pub;
+
+
+    ros::Subscriber joystick_sub;
+    ros::Publisher com_pub;
+    std_msgs::String com_msg;
+
+    ros::Publisher task_pub;
+    tocabi_controller::TaskCommand task_msg;
+
+    ros::Publisher velcommand_pub;
+    tocabi_controller::VelocityCommand velcmd_msg;
+
+    ros::Publisher android_pub;
+    ros::Subscriber android_sub;
+
+
 
     float pp(float val){
         if (val < 0){
@@ -397,16 +398,6 @@ public:
             return val / 150.0;
         }
     };
-
-    ros::Subscriber joystick_sub;
-    ros::Subscriber android_sub;
-    tocabi_controller::TaskCommand task_msg;
-
-    tocabi_controller::VelocityCommand vel_msg;
-
-    tocabi_controller::VelocityCommand velcmd_msg;
-    std_msgs::String com_msg;
-
 
 protected:
     QObject *m_Q;
