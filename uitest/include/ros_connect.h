@@ -7,6 +7,7 @@
 #include "SensorState.h"
 #include "Joy.h"
 #include "TaskCommand.h"
+#include "VelocityCommand.h"
 
 #include <QObject>
 #include <QPoint>
@@ -37,8 +38,10 @@ public:
         pos_sub = nh.subscribe("/tocabi/point", 1, &ros_connect::pos_cb, this);
         tt = 0;
 
-        state_pub = nh.advertise<std_msgs::String>("/tocabi/command", 100);
+        com_pub = nh.advertise<std_msgs::String>("/tocabi/command", 100);
+        velcommand_pub = nh.advertise<tocabi_controller::VelocityCommand>("/tocabi/velcommand", 100);
         task_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
+
 
         joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);
 
@@ -203,8 +206,6 @@ public:
 
     void joystick_cb(const sensor_msgs::Joy::ConstPtr &msg)
     {
-        if(msg->buttons[0])         StateHandle();
-            
         char buf[128];
         char buf2[128];
 
@@ -263,34 +264,46 @@ public:
             else
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
-         
-        cnt_pub++;
-        // joystick command transfer to mujoco_sim
-        if(cnt_pub == 50){
-            TaskHandle(msg);
-            cnt_pub = 0;
-        }
+
+        if(msg->buttons[6])
+            StateInitHandle();
+        if(msg->buttons[7])
+            TaskHandle();
+
+        VelocityHandle(msg);
     };
 
-    void StateHandle(){
-        com_msg.data = std::string("simvirtualjoint");
-        state_pub.publish(com_msg);
-    }
 
-    void TaskHandle(const sensor_msgs::Joy::ConstPtr &msg)
+
+//////////////////////////////////////////////////////////////////////
+
+
+    void StateInitHandle()
     {
-        // if(msg->buttons[7])
-        // double dot_=msg->axes[0];
-        
-        task_msg.ratio = 0.5;
-        task_msg.height = 0.85;
-        task_msg.time = 1.;
-        task_msg.mode = 2;
-        task_msg.pitch = ((double)msg->axes[0])*20.;
-        task_msg.yaw = ((double)msg->axes[1])*20.;
+        com_msg.data = std::string("stateestimation");
+        com_pub.publish(com_msg);
+    }
+    void VelocityHandle(const sensor_msgs::Joy::ConstPtr& msg)
+    {
+        velcmd_msg.des_vel.resize(6);
+        velcmd_msg.des_vel[0] = (double)msg->axes[0] / 4.;
+        velcmd_msg.des_vel[1] = (double)msg->axes[1] / 4.;
 
+        velcommand_pub.publish(velcmd_msg);
+    }
+    void TaskHandle()
+    {
+        // task_msg.ratio = 0.5;
+        // task_msg.height = 0.85;
+        // task_msg.time = 1.;
+        task_msg.mode = 5;                       // ??????????
+        
         task_pub.publish(task_msg);
     }
+
+//////////////////////////////////////////////////////////////////////
+
+
 
     int cnt_pub = 0;
     sensor_msgs::JointState state;
@@ -301,7 +314,8 @@ public:
     ros::Subscriber pos_sub;
     ros::Publisher command_pub;
 
-    ros::Publisher state_pub;
+    ros::Publisher com_pub;
+    ros::Publisher velcommand_pub;
     ros::Publisher task_pub;
     ros::Publisher button_pub;
     ros::Publisher switch_pub;
@@ -317,6 +331,7 @@ public:
 
     ros::Subscriber joystick_sub;
     tocabi_controller::TaskCommand task_msg;
+    tocabi_controller::VelocityCommand velcmd_msg;
     std_msgs::String com_msg;
 
 protected:
