@@ -210,7 +210,9 @@ public:
         m_Q->findChild<QObject *>("com1")->setProperty("y", x);
     };
 
+ 
 
+ 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -275,15 +277,15 @@ public:
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
 
-        if (msg->buttons[6])
+        if (msg->buttons[4])
             StateInitHandle();
-        if (msg->buttons[7])
+        if (msg->buttons[5])
             TaskHandle();
+        if(msg->buttons[8])
+            EmergencyOff();
         if (msg->axes[6] != 0) {
-            if (msg->axes[6] < 0)
-                ChangeConMode(-1);
-            else if (msg->axes[6] >0)
-                ChangeConMode(1);
+            if (msg->axes[6] < 0)       ChangeConMode(-1);
+            else if (msg->axes[6] >0)   ChangeConMode(1);
         }
 
         VelocityHandle(msg);
@@ -316,15 +318,16 @@ public:
         VelHandle_android(msg);
     }
 
-
-
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
     void StateInitHandle()
     {
-        com_msg.data = std::string("stateestimation");
+        com_msg.data = std::string("simvirtualjoint");
+        com_pub.publish(com_msg);
+    }
+    void EmergencyOff()
+    {
+        com_msg.data = std::string("emergencyoff");
         com_pub.publish(com_msg);
     }
 
@@ -341,11 +344,34 @@ public:
     void VelocityHandle(const sensor_msgs::Joy::ConstPtr& msg)
     {
         velcmd_msg.des_vel.resize(6);
-        velcmd_msg.des_vel[0] = (double)msg->axes[0] / 4.;
-        velcmd_msg.des_vel[1] = (double)msg->axes[1] / 4.;
-        
-        velcmd_msg.des_vel[2] = (((double)msg->axes[5] + 1.) / 8.)
-                                - (((double)msg->axes[4] + 1.) / 8.);
+
+        switch (velcmd_msg.task_link) {
+        case 0:             // upper body
+            velcmd_msg.des_vel[0] = (double)msg->axes[0] / -2.;
+            velcmd_msg.des_vel[1] = (double)msg->axes[1] / 2.;
+            velcmd_msg.des_vel[2] = (((double)msg->axes[4] + 1.) / 4.)
+                                  - (((double)msg->axes[5] + 1.) / 4.);
+            break;
+        case 1:             // right hand
+            velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
+            velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
+            velcmd_msg.des_vel[2] = (((double)msg->axes[5] + 1.) / 4.)
+                                  - (((double)msg->axes[4] + 1.) / 4.);
+            break;
+        case 2:
+            break;
+        case 3:             // left hand
+            velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
+            velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
+            velcmd_msg.des_vel[2] = (((double)msg->axes[5] + 1.) / 4.)
+                                  - (((double)msg->axes[4] + 1.) / 4.);
+            break;
+        case 4:
+            break;
+        default:
+            break;
+
+        }
 
         velcommand_pub.publish(velcmd_msg);
     }
@@ -353,7 +379,7 @@ public:
     void VelHandle_android(const geometry_msgs::Twist::ConstPtr &msg)
     {
         velcmd_msg.des_vel.resize(6);
-        velcmd_msg.des_vel[0] = -1 * ((double)msg->angular.z / 4.);
+        velcmd_msg.des_vel[0] = -1. * ((double)msg->angular.z / 4.);
         velcmd_msg.des_vel[1] = (double)msg->linear.x / 4.;
 
         velcommand_pub.publish(velcmd_msg);
@@ -362,10 +388,8 @@ public:
     void ChangeConMode(int data)
     {
         mode_index -= data;
-        if(mode_index > 4)
-            mode_index = 4;
-        if(mode_index < 0)
-            mode_index = 0;
+        if(mode_index > 4)      mode_index = 0;
+        if(mode_index < 0)      mode_index = 4;
         velcmd_msg.task_link = change_mode[mode_index];
     }
 
@@ -410,8 +434,8 @@ public:
 
 protected:
     QObject *m_Q;
-    uint32_t change_mode[5] = {0, 1, 2, 3, 4};
     int mode_index = 0;
+    uint32_t change_mode[5] = {0, 1, 2, 3, 4};
 
 signals:
 
