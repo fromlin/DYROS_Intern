@@ -364,12 +364,12 @@ public:
 
     void ChangeConMode(int data)
     {
-        if(change_mode > 4)
-            change_mode = 0;
-        if(change_mode < 0)
-            change_mode = 4;
-
-        velcmd_msg.task_link = change_mode - data;
+        if(mode_index > 4)
+            mode_index = 4;
+        if(mode_index < 0)
+            mode_index = 0;
+        mode_index += data;
+        velcmd_msg.task_link = change_mode[mode_index];
         velcommand_pub.publish(velcmd_msg);
     }
 
@@ -414,7 +414,8 @@ public:
 
 protected:
     QObject *m_Q;
-    uint32_t change_mode;
+    uint32_t change_mode[5] = {0, 1, 2, 3, 4};
+    int mode_index = 0;
 
 signals:
 
@@ -422,3 +423,4 @@ public slots:
 };
 
 #endif // ROS_CONNECT_H
+
