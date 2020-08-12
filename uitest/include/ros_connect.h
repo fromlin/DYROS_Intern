@@ -17,6 +17,7 @@
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/Point32.h>
 #include <geometry_msgs/PointStamped.h>
+#include <VelocityCommand.h>
 #include <geometry_msgs/PolygonStamped.h>
 #include <math.h>
 #define min(x, y) (((x) < (y)) ? (x) : (y))
@@ -39,6 +40,7 @@ public:
 
         task_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
         android_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
+        vel_pub = nh.advertise<tocabi_controller::VelocityCommand>("/tocabi/velcommand",100);
 
         joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);
         android_sub  =  nh.subscribe("/controller/android_command", 1 , &ros_connect::android_cb,this);
@@ -276,8 +278,8 @@ public:
         char buf[128];
         char buf2[128];
         float temp[2];
-        temp[0] = msg->linear.x;
-        temp[1] = msg->angular.z;
+        temp[0] = -msg->angular.z;
+        temp[1] = -msg->linear.x;
         //temp[2] = msg->linear.z;
 
         //geometry_msgs::Vector3 an = msg->linear;
@@ -298,11 +300,12 @@ public:
             m_Q->findChild<QObject *>(buf2)->setProperty("value", dot / 200.0 + 0.5);
         }
             cnt_pub++;
+        VelHandle_android(msg);
          //joystick command transfer to mujoco_sim
-         if(cnt_pub == 100){
-           TaskHandle_android(msg);
-           cnt_pub = 0;
-         }
+        //  if(cnt_pub == 100){
+        //    TaskHandle_android(msg);
+        //    cnt_pub = 0;
+        //  }
        
     }
 
@@ -331,7 +334,18 @@ public:
         task_msg.yaw = ((double)msg->linear.x)*20.;
 
         task_pub.publish(task_msg);
+        
     }
+
+    void VelHandle_android(const geometry_msgs::Twist::ConstPtr &msg){
+        vel_msg.des_vel.resize(6);
+        vel_msg.des_vel[0] = -1 * ((double)msg->angular.z / 4.);
+        vel_msg.des_vel[1] = (double)msg->linear.x / 4.;
+
+        vel_pub.publish(vel_msg);
+
+    }
+
 
     int cnt_pub = 0;
     sensor_msgs::JointState state;
@@ -346,6 +360,7 @@ public:
     ros::Publisher android_pub;
     ros::Publisher button_pub;
     ros::Publisher switch_pub;
+    ros::Publisher vel_pub;
 
     float pp(float val){
         if (val < 0){
@@ -359,6 +374,7 @@ public:
     ros::Subscriber joystick_sub;
     ros::Subscriber android_sub;
     tocabi_controller::TaskCommand task_msg;
+    tocabi_controller::VelocityCommand vel_msg;
 
 protected:
     QObject *m_Q;
