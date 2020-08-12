@@ -7,7 +7,12 @@
 #include "SensorState.h"
 #include "Joy.h"
 #include "TaskCommand.h"
+
 #include "geometry_msgs/Twist.h"
+
+#include "VelocityCommand.h"
+
+
 #include <QObject>
 #include <QPoint>
 #include <QDebug>
@@ -38,9 +43,12 @@ public:
         pos_sub = nh.subscribe("/tocabi/point", 1, &ros_connect::pos_cb, this);
         tt = 0;
 
+        com_pub = nh.advertise<std_msgs::String>("/tocabi/command", 100);
+        velcommand_pub = nh.advertise<tocabi_controller::VelocityCommand>("/tocabi/velcommand", 100);
         task_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
         android_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
         vel_pub = nh.advertise<tocabi_controller::VelocityCommand>("/tocabi/velcommand",100);
+
 
         joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);
         android_sub  =  nh.subscribe("/controller/android_command", 1 , &ros_connect::android_cb,this);
@@ -265,13 +273,14 @@ public:
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
 
-        cnt_pub++;
-        // joystick command transfer to mujoco_sim
-        if(cnt_pub == 100){
-            TaskHandle(msg);
-            cnt_pub = 0;
-        }
+        if(msg->buttons[6])
+            StateInitHandle();
+        if(msg->buttons[7])
+            TaskHandle();
+
+        VelocityHandle(msg);
     };
+
 
     void android_cb(const geometry_msgs::Twist::ConstPtr &msg)
     {
@@ -310,19 +319,34 @@ public:
     }
 
 
-    void TaskHandle(const sensor_msgs::Joy::ConstPtr &msg)
+    void TaskHandle(const sensor_msgs::Joy::ConstPtr &msg){}
+
+//////////////////////////////////////////////////////////////////////
+
+
+    void StateInitHandle()
     {
-        // if(msg->buttons[7])
-        // double dot_=msg->axes[0];
+        com_msg.data = std::string("stateestimation");
+        com_pub.publish(com_msg);
+    }
+    void VelocityHandle(const sensor_msgs::Joy::ConstPtr& msg)
+    {
+        velcmd_msg.des_vel.resize(6);
+        velcmd_msg.des_vel[0] = (double)msg->axes[0] / 4.;
+        velcmd_msg.des_vel[1] = (double)msg->axes[1] / 4.;
+
+        velcommand_pub.publish(velcmd_msg);
+    }
+    void TaskHandle()
+    {
         task_msg.ratio = 0.5;
         task_msg.height = 0.85;
         task_msg.time = 1.;
-        task_msg.mode = 2;
-        task_msg.pitch = ((double)msg->axes[0])*20.;
-        task_msg.yaw = ((double)msg->axes[1])*20.;
-
+        task_msg.mode = 9;
+        
         task_pub.publish(task_msg);
     }
+
 
     void TaskHandle_android(const geometry_msgs::Twist::ConstPtr &msg)
     {
@@ -345,6 +369,7 @@ public:
         vel_pub.publish(vel_msg);
 
     }
+//////////////////////////////////////////////////////////////////////
 
 
     int cnt_pub = 0;
@@ -356,6 +381,8 @@ public:
     ros::Subscriber pos_sub;
     ros::Publisher command_pub;
 
+    ros::Publisher com_pub;
+    ros::Publisher velcommand_pub;
     ros::Publisher task_pub;
     ros::Publisher android_pub;
     ros::Publisher button_pub;
@@ -374,7 +401,12 @@ public:
     ros::Subscriber joystick_sub;
     ros::Subscriber android_sub;
     tocabi_controller::TaskCommand task_msg;
+
     tocabi_controller::VelocityCommand vel_msg;
+
+    tocabi_controller::VelocityCommand velcmd_msg;
+    std_msgs::String com_msg;
+
 
 protected:
     QObject *m_Q;
