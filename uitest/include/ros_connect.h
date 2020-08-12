@@ -280,6 +280,14 @@ public:
         if(msg->buttons[7])
             TaskHandle();
 
+        if(msg->axes[6] != 0 ){
+            if(msg->axes[6] < 0)
+                ChangeConMode(-1);
+            else if(msg->axes[6] >0)
+                ChangeConMode(1);
+        }    
+            //  ChangeConMode(msg->axes[6]);
+
         VelocityHandle(msg);
     };
 
@@ -314,21 +322,16 @@ public:
         VelHandle_android(msg);
     }
 
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
     void StateInitHandle()
     {
         com_msg.data = std::string("stateestimation");
         com_pub.publish(com_msg);
-    }
-
-    void VelocityHandle(const sensor_msgs::Joy::ConstPtr& msg)
-    {
-        velcmd_msg.des_vel.resize(6);
-        velcmd_msg.des_vel[0] = (double)msg->axes[0] / 4.;
-        velcmd_msg.des_vel[1] = (double)msg->axes[1] / 4.;
-
-        velcommand_pub.publish(velcmd_msg);
     }
 
     void TaskHandle()
@@ -341,29 +344,39 @@ public:
         task_pub.publish(task_msg);
     }
 
-    void TaskHandle_android(const geometry_msgs::Twist::ConstPtr &msg)
+    void VelocityHandle(const sensor_msgs::Joy::ConstPtr& msg)
     {
-        task_msg.ratio = 0.5;
-        task_msg.height = 0.85;
-        task_msg.time = 1.;
-        task_msg.mode = 2;
-        task_msg.pitch = ((double)msg->angular.z)*20.;
-        task_msg.yaw = ((double)msg->linear.x)*20.;
+        velcmd_msg.des_vel.resize(6);
+        velcmd_msg.des_vel[0] = (double)msg->axes[0] / 4.;
+        velcmd_msg.des_vel[1] = (double)msg->axes[1] / 4.;
 
-        task_pub.publish(task_msg);
-        
+        velcommand_pub.publish(velcmd_msg);
     }
 
-    void VelHandle_android(const geometry_msgs::Twist::ConstPtr &msg){
+    void VelHandle_android(const geometry_msgs::Twist::ConstPtr &msg)
+    {
         velcmd_msg.des_vel.resize(6);
         velcmd_msg.des_vel[0] = -1 * ((double)msg->angular.z / 4.);
         velcmd_msg.des_vel[1] = (double)msg->linear.x / 4.;
 
         velcommand_pub.publish(velcmd_msg);
+    }
 
+    void ChangeConMode(int data)
+    {
+        if(change_mode > 4)
+            change_mode = 0;
+        if(change_mode < 0)
+            change_mode = 4;
+
+        velcmd_msg.task_link = change_mode - data;
+        velcommand_pub.publish(velcmd_msg);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
     sensor_msgs::JointState state;
@@ -401,6 +414,7 @@ public:
 
 protected:
     QObject *m_Q;
+    uint32_t change_mode;
 
 signals:
 
