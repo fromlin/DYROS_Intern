@@ -275,18 +275,16 @@ public:
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
 
-        if(msg->buttons[6])
+        if (msg->buttons[6])
             StateInitHandle();
-        if(msg->buttons[7])
+        if (msg->buttons[7])
             TaskHandle();
-
-        if(msg->axes[6] != 0 ){
-            if(msg->axes[6] < 0)
+        if (msg->axes[6] != 0) {
+            if (msg->axes[6] < 0)
                 ChangeConMode(-1);
-            else if(msg->axes[6] >0)
+            else if (msg->axes[6] >0)
                 ChangeConMode(1);
-        }    
-            //  ChangeConMode(msg->axes[6]);
+        }
 
         VelocityHandle(msg);
     };
@@ -299,15 +297,11 @@ public:
         float temp[2];
         temp[0] = -msg->angular.z;
         temp[1] = -msg->linear.x;
-        //temp[2] = msg->linear.z;
 
-        //geometry_msgs::Vector3 an = msg->linear;
         for (int i = 0; i < 2; i++)
         {
             float dot = (temp[i])*pow(-1, i) * 100;
-            //for (int i = 0; i < 4; i++)
-        
-            //float dot = (msg->axes[i]) * 100.0;
+
             std::sprintf(buf, "%8.3f", dot);
             std::sprintf(buf2, "t%d", i +46);
             m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
@@ -349,6 +343,9 @@ public:
         velcmd_msg.des_vel.resize(6);
         velcmd_msg.des_vel[0] = (double)msg->axes[0] / 4.;
         velcmd_msg.des_vel[1] = (double)msg->axes[1] / 4.;
+        
+        velcmd_msg.des_vel[2] = (((double)msg->axes[5] + 1.) / 8.)
+                                - (((double)msg->axes[4] + 1.) / 8.);
 
         velcommand_pub.publish(velcmd_msg);
     }
@@ -364,13 +361,12 @@ public:
 
     void ChangeConMode(int data)
     {
+        mode_index -= data;
         if(mode_index > 4)
             mode_index = 4;
         if(mode_index < 0)
             mode_index = 0;
-        mode_index += data;
         velcmd_msg.task_link = change_mode[mode_index];
-        velcommand_pub.publish(velcmd_msg);
     }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,4 +419,3 @@ public slots:
 };
 
 #endif // ROS_CONNECT_H
-
