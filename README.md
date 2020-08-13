@@ -16,6 +16,7 @@ su
 >  
 >  
 >  <br/>
+
 >	> + Write a script 'auto_run.sh' to run the service.     
 ```
 cd /etc/init.d/
