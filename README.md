@@ -8,28 +8,24 @@ Dyros Internship
 
 
 > ### Automatically run when booting the joystick.    
-> > + Switch to the root account.
+>	> + Switch to the root account.
 ```
 su
 ```
-> > <br/>
-> > 
-> >
+<br/>
 
 
 
-> > + Write a script 'auto_run.sh' to run the service.     
+>	> + Write a script 'auto_run.sh' to run the service.     
 ```
 cd /etc/init.d/
 vi xbox_auto.sh
 ```    
-> > <br/>
-> > <br/>
-> >
+<br/>
 
 
 
-> > + Writing shell scripts.
+>	> + Writing shell scripts.
 > ex)
 ```
 #! /bin/sh
@@ -63,9 +59,7 @@ esac
 
 exit 0
 ```
-> > <br/>
-> > <br/>
-> >
+<br/>
 
 
 
@@ -73,9 +67,7 @@ exit 0
 ```
 chmod +x xboxrun.sh
 ```     
-> > <br/>
-> > <br/>
-> >
+<br/>
 
 
 
@@ -83,9 +75,7 @@ chmod +x xboxrun.sh
 ```
 update-rc.d xboxrun.sh defaults
 ```     
-> > <br/>
-> > <br/>
-> >
+<br/>
 
 
 
@@ -93,15 +83,13 @@ update-rc.d xboxrun.sh defaults
 ```
 reboot
 ```
-> > <br/>
-> > <br/>
-> >
+<br/>
 
 
 
 ----------
 <br/><br/>
-> > + To connect the Android Smartphone with ROSCORE(Computer),     
+> ### To connect the Android Smartphone with ROSCORE(Computer),     
 ```
 Joystick Topic in app have to be edited to '/controller/android_command' 
 ```
