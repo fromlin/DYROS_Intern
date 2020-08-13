@@ -13,9 +13,9 @@ Dyros Internship
 su
 ```
 <br/><br/>
-
-
-
+>  
+>  
+>  
 >	> + Write a script 'auto_run.sh' to run the service.     
 ```
 cd /etc/init.d/
@@ -85,7 +85,8 @@ reboot
 ```
 <br/><br/>
 
------------------
+----------
+<br/><br/>
 
 >	> + To connect the Android Smartphone with ROSCORE(Computer),     
 ```
