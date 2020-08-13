@@ -7,26 +7,26 @@ import QtQml 2.2
 Window {
     id: window
     visible: true
-    width: 1280
-    height: 720
+    width: 1024
+    height: 600
     title: qsTr("UI")
 
 
     Frame {
         id: frame5
-        x: 650
-        y: 396
-        width: 600
-        height: 300
+        x: 613
+        y: 360
+        width: 384
+        height: 226
         padding: 0
 
         Canvas{
             id: leftfoot
             objectName: "can1"
-            x: 0
+            x: -17
             y: 0
-            width: 500
-            height: 300
+            width: 445
+            height: 287
             onPaint: {
                 var ctx=getContext("2d");
                 ctx.fillStyle=Qt.rgba(1,0,0,1);
@@ -49,8 +49,8 @@ Window {
         Rectangle {
             id: rectangle
             objectName: "rec1"
-            x: 286
-            y: 63
+            x: 207
+            y: 52
             width: 28
             height: 26
             color: "#dcac9e"
@@ -61,8 +61,8 @@ Window {
         Rectangle {
             id: rectangle1
             objectName: "rec2"
-            x: 286
-            y: 167
+            x: 207
+            y: 156
             width: 28
             height: 26
             color: "#dcac9e"
@@ -73,8 +73,8 @@ Window {
         Rectangle {
             id: rectangle2
             objectName: "rec3"
-            x: 279
-            y: 155
+            x: 200
+            y: 144
             width: 130
             height: 50
             color: "#cbcbcb"
@@ -83,8 +83,8 @@ Window {
         Rectangle {
             id: rectangle3
             objectName: "rec4"
-            x: 279
-            y: 51
+            x: 200
+            y: 40
             width: 130
             height: 50
             color: "#cbcbcb"
@@ -93,8 +93,8 @@ Window {
         Rectangle {
             id: com1
             objectName: "com1"
-            x: 183
-            y: 40
+            x: 104
+            y: 29
             width: 16
             height: 16
             color: "#fd2121"
@@ -124,8 +124,8 @@ Window {
 
     Frame {
         id: frame
-        x: 341
-        y: 370
+        x: 314
+        y: 331
         width: 281
         height: 130
 
@@ -248,8 +248,8 @@ Window {
 
     Frame {
         id: frame1
-        x: 21
-        y: 370
+        x: 12
+        y: 331
         width: 281
         height: 130
         ProgressBar {
@@ -373,10 +373,10 @@ Window {
 
     Frame {
         id: frame2
-        x: 21
-        y: 46
+        x: 12
+        y: 25
         width: 281
-        height: 183
+        height: 169
         ProgressBar {
             id: p13
             x: 0
@@ -535,10 +535,10 @@ Window {
 
     Frame {
         id: frame3
-        x: 341
-        y: 46
+        x: 314
+        y: 25
         width: 281
-        height: 183
+        height: 169
         ProgressBar {
             id: p19
             x: 0
@@ -694,8 +694,8 @@ Window {
 
     Frame {
         id: frame4
-        x: 184
-        y: 265
+        x: 101
+        y: 228
         width: 281
         height: 72
         ProgressBar {
@@ -763,8 +763,10 @@ Window {
 
     Text {
         id: text6
-        x: 59
-        y: 265
+        x: 33
+        y: 228
+        width: 41
+        height: 31
         text: qsTr("TIME")
         font.pixelSize: 18
     }
@@ -772,16 +774,16 @@ Window {
     Text {
         id: text7
         objectName: "time_text"
-        x: 45
-        y: 293
+        x: 19
+        y: 254
         text: qsTr("00:00:00")
         font.pixelSize: 18
     }
 
     Frame {
         id: frame6
-        x: 21
-        y: 553
+        x: 12
+        y: 469
         width: 281
         height: 130
         ProgressBar {
@@ -904,8 +906,8 @@ Window {
 
     Frame {
         id: frame7
-        x: 341
-        y: 553
+        x: 314
+        y: 469
         width: 281
         height: 130
         ProgressBar {
@@ -1028,8 +1030,8 @@ Window {
 
     Button {
         id: button
-        x: 679
-        y: 46
+        x: 613
+        y: 25
         text: qsTr("Gravity")
         onClicked: {
             ros.button_ros(0,"gravity");
@@ -1038,8 +1040,8 @@ Window {
 
     Button {
         id: button1
-        x: 804
-        y: 46
+        x: 731
+        y: 25
         text: qsTr("Task")
         onClicked: {
 
@@ -1050,8 +1052,8 @@ Window {
 
     Text {
         id: text10
-        x: 650
-        y: 376
+        x: 613
+        y: 374
         text: qsTr("floor status")
         font.pixelSize: 12
     }
@@ -1060,9 +1062,10 @@ Window {
 
     TabBar {
         id: tabBar
-        x: 986
-        y: 46
-        width: 240
+        x: 850
+        y: 25
+        width: 162
+        height: 40
         currentIndex: swipeView.currentIndex
 
         TabButton {
@@ -1076,14 +1079,14 @@ Window {
 
     Frame {
         id: frame10
-        x: 637
-        y: 101
-        width: 613
+        x: 612
+        y: 87
+        width: 405
         height: 267
 
         Frame {
             id: frame8
-            x: 0
+            x: -5
             y: 15
             width: 280
             height: 100
@@ -1167,10 +1170,10 @@ Window {
 
         Frame {
             id: frame9
-            x: 306
-            y: 15
-            width: 283
-            height: 100
+            x: -111
+            y: 129
+            width: 236
+            height: 93
 
             Text {
                 id: text12
@@ -1182,10 +1185,10 @@ Window {
 
             RoundButton {
                 id: b4
-                x: 198
-                y: -6
-                width: 30
-                height: 30
+                x: 163
+                y: 0
+                width: 25
+                height: 25
                 text: "Y"
                 checked: false
                 checkable: false
@@ -1194,22 +1197,22 @@ Window {
 
             RoundButton {
                 id: b3
-                x: 166
+                x: 138
                 y: 31
-                width: 30
-                height: 30
+                width: 25
+                height: 25
                 text: "X"
-                anchors.verticalCenterOffset: 0
+                anchors.verticalCenterOffset: 4
                 anchors.verticalCenter: parent.verticalCenter
                 objectName: "b2"
             }
 
             RoundButton {
                 id: b1
-                x: 198
-                y: 53
-                width: 30
-                height: 30
+                x: 164
+                y: 50
+                width: 25
+                height: 25
                 text: "A"
                 checked: false
                 objectName: "b0"
@@ -1217,20 +1220,20 @@ Window {
 
             RoundButton {
                 id: b2
-                x: 229
+                x: 188
                 y: 0
-                width: 30
-                height: 30
+                width: 25
+                height: 25
                 text: "B"
-                anchors.verticalCenterOffset: 0
+                anchors.verticalCenterOffset: 4
                 anchors.verticalCenter: parent.verticalCenter
                 objectName: "b1"
             }
 
             Button {
                 id: b5
-                x: 6
-                y: 50
+                x: 2
+                y: 41
                 width: 55
                 height: 25
                 text: qsTr("L1")
@@ -1239,18 +1242,18 @@ Window {
 
             Button {
                 id: b6
-                x: 82
-                y: 50
+                x: 70
+                y: 39
                 width: 55
                 height: 25
                 text: qsTr("R1")
                 objectName: "b5"
             }
-            
+
             Button {
                 id: b7
-                x: 6
-                y: 6
+                x: -1
+                y: 4
                 width: 55
                 height: 25
                 text: qsTr("L2")
@@ -1258,8 +1261,8 @@ Window {
             }
             Button {
                 id: b8
-                x: 82
-                y: 6
+                x: 70
+                y: 4
                 width: 55
                 height: 25
                 text: qsTr("R2")
@@ -1270,22 +1273,24 @@ Window {
 
         Frame {
             id: frame11
-            x: 309
+            x: 131
             y: 143
-            width: 280
+            width: 256
             height: 100
             ProgressBar {
                 id: p46
-                x: 1
-                y: 18
+                x: -8
+                y: 22
+                width: 199
+                height: 6
                 objectName: "p46"
                 value: 0.5
             }
 
             ProgressBar {
                 id: p47
-                x: 1
-                y: 63
+                x: -7
+                y: 66
                 height: 7
                 objectName: "p47"
                 value: 0.5
@@ -1293,8 +1298,10 @@ Window {
 
             Text {
                 id: t48
-                x: 97
+                x: 89
                 y: -4
+                width: 6.575
+                height: 15
                 text: qsTr("X")
                 font.pixelSize: 12
                 horizontalAlignment: Text.AlignRight
@@ -1303,7 +1310,7 @@ Window {
 
             Text {
                 id: t49
-                x: 97
+                x: 88
                 y: 41
                 text: qsTr("Y")
                 font.pixelSize: 12
@@ -1311,8 +1318,9 @@ Window {
 
             Text {
                 id: t50
-                x: 211
+                x: 195
                 y: 13
+                height: 15
                 text: qsTr("000.000")
                 font.pixelSize: 12
                 horizontalAlignment: Text.AlignRight
@@ -1321,7 +1329,7 @@ Window {
 
             Text {
                 id: t51
-                x: 212
+                x: 196
                 y: 58
                 height: 15
                 text: qsTr("000.000")
@@ -1332,7 +1340,7 @@ Window {
 
             Button {
                 id: b19
-                x: 211
+                x: 197
                 y: 36
                 width: 44
                 height: 15
@@ -1353,8 +1361,8 @@ Window {
 
         Frame {
             id: frame12
-            x: 0
-            y: 143
+            x: -228
+            y: 129
             width: 110
             height: 100
             Text {
@@ -1419,8 +1427,8 @@ Window {
 
         Frame {
             id: frame13
-            x: 156
-            y: 155
+            x: 279
+            y: 15
             width: 110
             height: 76
             Text {
@@ -1472,3 +1480,9 @@ Window {
     }
 
 }
+
+/*##^##
+Designer {
+    D{i:129;anchors_x:"-7"}D{i:148;anchors_x:"-7"}D{i:154;anchors_x:"-7"}
+}
+##^##*/
