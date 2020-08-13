@@ -8,11 +8,11 @@ Dyros Internship
 
 
 > ### Automatically run when booting the joystick.    
-> > + Switch to the root account.
+>	> + Switch to the root account.
 ```
 su
 ```
-<br/><br/>
+<br/>
 
 
 
@@ -20,35 +20,62 @@ su
 ```
 cd /etc/init.d/
 vi xbox_auto.sh
-```     
-<br/><br/>
+```    
+<br/>
 
 
 
-> > + Writing shell scripts.
+>	> + Writing shell scripts.
 > ex)
 ```
-#! /bin/bash
-sudo xboxdrv --silent
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          xboxrun
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Auto connect xboxdrv
+# Description:       Automatically run this script at boot
+#                    placed in /etc/init.d.
+### END INIT INFO
+
+case "$1" in
+  start)
+	xboxdrv --config /usr/share/doc/xboxdrv/examples/default.xboxdrv
+	;;
+  stop)
+	;;
+  restart)
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+  *)
+	echo "Usage: xboxrun {start|stop|restart|status}" || true
+	exit 1
+esac
+
 exit 0
 ```
-<br/><br/>
+<br/>
 
 
 
 >	> + Give permission.     
 ```
-chmod 777 xbox_auto.sh
+chmod +x xboxrun.sh
 ```     
-<br/><br/>
+<br/>
 
 
 
 >	> + Register service.     
 ```
-update-rc.d xbox_auto.sh defaults
+update-rc.d xboxrun.sh defaults
 ```     
-<br/><br/>
+<br/>
 
 
 
@@ -56,12 +83,15 @@ update-rc.d xbox_auto.sh defaults
 ```
 reboot
 ```
+<br/>
+
+
+
+----------
 <br/><br/>
-
-
->	> + To connect the Android Smartphone with ROSCORE(Computer),     
+> ### To connect the Android Smartphone with ROSCORE(Computer),     
 ```
 Joystick Topic in app have to be edited to '/controller/android_command' 
 ```
-<br/><br/>
+<br/>
 
