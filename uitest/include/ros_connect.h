@@ -7,7 +7,10 @@
 #include "SensorState.h"
 #include "Joy.h"
 #include "TaskCommand.h"
+
+#include "geometry_msgs/Twist.h"
 #include "VelocityCommand.h"
+
 
 #include <QObject>
 #include <QPoint>
@@ -18,8 +21,9 @@
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/Point32.h>
 #include <geometry_msgs/PointStamped.h>
+#include <VelocityCommand.h>
 #include <geometry_msgs/PolygonStamped.h>
-
+#include <math.h>
 #define min(x, y) (((x) < (y)) ? (x) : (y))
 #define max(x, y) (((x) > (y)) ? (x) : (y))
 
@@ -38,12 +42,14 @@ public:
         pos_sub = nh.subscribe("/tocabi/point", 1, &ros_connect::pos_cb, this);
         tt = 0;
 
-        com_pub = nh.advertise<std_msgs::String>("/tocabi/command", 100);
-        velcommand_pub = nh.advertise<tocabi_controller::VelocityCommand>("/tocabi/velcommand", 100);
-        task_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
-
-
         joystick_sub = nh.subscribe("/controller/gui_command",1,&ros_connect::joystick_cb, this);
+
+        com_pub = nh.advertise<std_msgs::String>("/tocabi/command", 100);
+        task_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
+        velcommand_pub = nh.advertise<tocabi_controller::VelocityCommand>("/tocabi/velcommand", 100);
+
+        android_pub = nh.advertise<tocabi_controller::TaskCommand>("/tocabi/taskcommand", 100);
+        android_sub  =  nh.subscribe("/controller/android_command", 1 , &ros_connect::android_cb,this);
 
         char buf[128];
         char buf2[128];
@@ -204,6 +210,12 @@ public:
         m_Q->findChild<QObject *>("com1")->setProperty("y", x);
     };
 
+ 
+
+ 
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
     void joystick_cb(const sensor_msgs::Joy::ConstPtr &msg)
     {
         char buf[128];
@@ -265,32 +277,60 @@ public:
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
 
-        if(msg->buttons[6])
+        if (msg->buttons[6])
             StateInitHandle();
-        if(msg->buttons[7])
+        if (msg->buttons[7])
             TaskHandle();
+        if(msg->buttons[8])
+            EmergencyOff();
+        if (msg->axes[6] != 0) {
+            if (msg->axes[6] < 0)       ChangeConMode(-1);
+            else if (msg->axes[6] >0)   ChangeConMode(1);
+        }
 
         VelocityHandle(msg);
     };
 
 
+    void android_cb(const geometry_msgs::Twist::ConstPtr &msg)
+    {
+        char buf[128];
+        char buf2[128];
+        float temp[2];
+        temp[0] = -msg->angular.z;
+        temp[1] = -msg->linear.x;
 
-//////////////////////////////////////////////////////////////////////
+        for (int i = 0; i < 2; i++)
+        {
+            float dot = (temp[i])*pow(-1, i) * 100;
 
+            std::sprintf(buf, "%8.3f", dot);
+            std::sprintf(buf2, "t%d", i +46);
+            m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
+
+            std::sprintf(buf, "#%02X0000", (int)(pp(dot) * 256.0));
+            m_Q->findChild<QObject *>(buf2)->setProperty("color", buf);
+
+            std::sprintf(buf2, "p%d", i + 44);
+            m_Q->findChild<QObject *>(buf2)->setProperty("value", dot / 200.0 + 0.5);
+        }
+
+        VelHandle_android(msg);
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
     void StateInitHandle()
     {
-        com_msg.data = std::string("stateestimation");
+        com_msg.data = std::string("simvirtualjoint");
         com_pub.publish(com_msg);
     }
-    void VelocityHandle(const sensor_msgs::Joy::ConstPtr& msg)
+    void EmergencyOff()
     {
-        velcmd_msg.des_vel.resize(6);
-        velcmd_msg.des_vel[0] = (double)msg->axes[0] / 4.;
-        velcmd_msg.des_vel[1] = (double)msg->axes[1] / 4.;
-
-        velcommand_pub.publish(velcmd_msg);
+        com_msg.data = std::string("emergencyoff");
+        com_pub.publish(com_msg);
     }
+
     void TaskHandle()
     {
         task_msg.ratio = 0.5;
@@ -301,24 +341,141 @@ public:
         task_pub.publish(task_msg);
     }
 
-//////////////////////////////////////////////////////////////////////
+    void VelocityHandle(const sensor_msgs::Joy::ConstPtr& msg)
+    {
+        velcmd_msg.des_vel.resize(6);
+
+        switch (velcmd_msg.task_link) {
+        case 0:             // pos : COM rot : pelv 
+            velcmd_msg.des_vel[0] = (double)msg->axes[0] / -2.;
+            velcmd_msg.des_vel[1] = (double)msg->axes[1] / 2.;
+            if(msg->buttons[4]){
+            velcmd_msg.des_vel[2] = (((double)msg->axes[4] + 1.) / 4.)
+                                  ;}
+            else {
+            velcmd_msg.des_vel[2] = -((((double)msg->axes[4] + 1.) / 4.));}
+                                  
+                                  //com pos
+            
+            
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            if(msg->buttons[5]){ 
+            velcmd_msg.des_vel[5] = (((double)msg->axes[5] + 1.) / 4.);} 
+            else { 
+            velcmd_msg.des_vel[5] = - ((((double)msg->axes[5] + 1.) / 4.)); } //pelv rot
+                                
+            
+            break;
+        case 1:             // rot : upperbody
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            if(msg->buttons[5]){
+            velcmd_msg.des_vel[5] = (((double)msg->axes[5] + 1.) / 4.);} //upperbody rot (done)
+            else {
+            velcmd_msg.des_vel[5] = -((((double)msg->axes[5] + 1.) / 4.));
+                                  
+            }
+
+            break;
+        case 2:             // righthand
+            velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
+            velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
+            
+            if(msg->buttons[4])
+            {
+                velcmd_msg.des_vel[2] = (((double)msg->axes[4] + 1.) / 4.);
+            }
+            else{
+                velcmd_msg.des_vel[2] = -((((double)msg->axes[4] + 1.) / 4.));  //righthand pos (done)
+            }
+
+
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            if(msg->buttons[5]){
+            velcmd_msg.des_vel[5] = ((double)msg->axes[5] + 1.) / 4.;} //righthand rot (done)
+            else {
+            velcmd_msg.des_vel[5] = - (((double)msg->axes[5] + 1.) / 4.);
+            }
+            break;
+
+        case 3:             // lefthand
+            velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
+            velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
+            if(msg->buttons[4])
+            {
+                velcmd_msg.des_vel[2] = (((double)msg->axes[4] + 1.) / 4.);
+            }
+            else{
+                velcmd_msg.des_vel[2] = -((((double)msg->axes[4] + 1.) / 4.));  //lefthand pos (done)
+            }
+
+
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            if(msg->buttons[5]){
+            velcmd_msg.des_vel[5] = ((double)msg->axes[5] + 1.) / 4.;} //lefthand rot (done)
+            else {
+            velcmd_msg.des_vel[5] = - (((double)msg->axes[5] + 1.) / 4.);
+            }
+            break;
+        // case 4:
+        //     break;
+        default:
+            break;
+
+        }
+
+        velcommand_pub.publish(velcmd_msg);
+    }
+
+    void VelHandle_android(const geometry_msgs::Twist::ConstPtr &msg)
+    {
+        velcmd_msg.des_vel.resize(6);
+        velcmd_msg.des_vel[0] = -1. * ((double)msg->angular.z / 4.);
+        velcmd_msg.des_vel[1] = (double)msg->linear.x / 4.;
+
+        velcommand_pub.publish(velcmd_msg);
+    }
+
+    void ChangeConMode(int data)
+    {
+        mode_index -= data;
+        if(mode_index > 3)      mode_index = 0;
+        if(mode_index < 0)      mode_index = 3;
+        velcmd_msg.task_link = change_mode[mode_index];
+    }
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-    int cnt_pub = 0;
+
+
     sensor_msgs::JointState state;
-
     ros::Subscriber joint_sub;
     ros::Subscriber time_sub;
     ros::Subscriber sensor_sub;
     ros::Subscriber pos_sub;
-    ros::Publisher command_pub;
-
-    ros::Publisher com_pub;
-    ros::Publisher velcommand_pub;
-    ros::Publisher task_pub;
     ros::Publisher button_pub;
     ros::Publisher switch_pub;
+
+
+    ros::Subscriber joystick_sub;
+    ros::Publisher com_pub;
+    std_msgs::String com_msg;
+
+    ros::Publisher task_pub;
+    tocabi_controller::TaskCommand task_msg;
+
+    ros::Publisher velcommand_pub;
+    tocabi_controller::VelocityCommand velcmd_msg;
+
+    ros::Publisher android_pub;
+    ros::Subscriber android_sub;
+
+
 
     float pp(float val){
         if (val < 0){
@@ -329,13 +486,10 @@ public:
         }
     };
 
-    ros::Subscriber joystick_sub;
-    tocabi_controller::TaskCommand task_msg;
-    tocabi_controller::VelocityCommand velcmd_msg;
-    std_msgs::String com_msg;
-
 protected:
     QObject *m_Q;
+    int mode_index = 0;
+    uint32_t change_mode[4] = {0, 1, 2, 3};
 
 signals:
 
