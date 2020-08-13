@@ -277,9 +277,9 @@ public:
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
 
-        if (msg->buttons[4])
+        if (msg->buttons[6])
             StateInitHandle();
-        if (msg->buttons[5])
+        if (msg->buttons[7])
             TaskHandle();
         if(msg->buttons[8])
             EmergencyOff();
@@ -346,28 +346,82 @@ public:
         velcmd_msg.des_vel.resize(6);
 
         switch (velcmd_msg.task_link) {
-        case 0:             // upper body
+        case 0:             // pos : COM rot : pelv 
             velcmd_msg.des_vel[0] = (double)msg->axes[0] / -2.;
             velcmd_msg.des_vel[1] = (double)msg->axes[1] / 2.;
+            if(msg->buttons[4]){
             velcmd_msg.des_vel[2] = (((double)msg->axes[4] + 1.) / 4.)
-                                  - (((double)msg->axes[5] + 1.) / 4.);
+                                  ;}
+            else {
+            velcmd_msg.des_vel[2] = -((((double)msg->axes[4] + 1.) / 4.));}
+                                  
+                                  //com pos
+            
+            
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            if(msg->buttons[5]){ 
+            velcmd_msg.des_vel[5] = (((double)msg->axes[5] + 1.) / 4.);} 
+            else { 
+            velcmd_msg.des_vel[5] = - ((((double)msg->axes[5] + 1.) / 4.)); } //pelv rot
+                                
+            
             break;
-        case 1:             // right hand
+        case 1:             // rot : upperbody
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            if(msg->buttons[5]){
+            velcmd_msg.des_vel[5] = (((double)msg->axes[5] + 1.) / 4.);} //upperbody rot (done)
+            else {
+            velcmd_msg.des_vel[5] = -((((double)msg->axes[5] + 1.) / 4.));
+                                  
+            }
+
+            break;
+        case 2:             // righthand
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
             velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[5] + 1.) / 4.)
-                                  - (((double)msg->axes[4] + 1.) / 4.);
+            
+            if(msg->buttons[4])
+            {
+                velcmd_msg.des_vel[2] = (((double)msg->axes[4] + 1.) / 4.);
+            }
+            else{
+                velcmd_msg.des_vel[2] = -((((double)msg->axes[4] + 1.) / 4.));  //righthand pos (done)
+            }
+
+
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            if(msg->buttons[5]){
+            velcmd_msg.des_vel[5] = ((double)msg->axes[5] + 1.) / 4.;} //righthand rot (done)
+            else {
+            velcmd_msg.des_vel[5] = - (((double)msg->axes[5] + 1.) / 4.);
+            }
             break;
-        case 2:
-            break;
-        case 3:             // left hand
+
+        case 3:             // lefthand
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
             velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[5] + 1.) / 4.)
-                                  - (((double)msg->axes[4] + 1.) / 4.);
+            if(msg->buttons[4])
+            {
+                velcmd_msg.des_vel[2] = (((double)msg->axes[4] + 1.) / 4.);
+            }
+            else{
+                velcmd_msg.des_vel[2] = -((((double)msg->axes[4] + 1.) / 4.));  //lefthand pos (done)
+            }
+
+
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            if(msg->buttons[5]){
+            velcmd_msg.des_vel[5] = ((double)msg->axes[5] + 1.) / 4.;} //lefthand rot (done)
+            else {
+            velcmd_msg.des_vel[5] = - (((double)msg->axes[5] + 1.) / 4.);
+            }
             break;
-        case 4:
-            break;
+        // case 4:
+        //     break;
         default:
             break;
 
@@ -388,8 +442,8 @@ public:
     void ChangeConMode(int data)
     {
         mode_index -= data;
-        if(mode_index > 4)      mode_index = 0;
-        if(mode_index < 0)      mode_index = 4;
+        if(mode_index > 3)      mode_index = 0;
+        if(mode_index < 0)      mode_index = 3;
         velcmd_msg.task_link = change_mode[mode_index];
     }
 
@@ -435,7 +489,7 @@ public:
 protected:
     QObject *m_Q;
     int mode_index = 0;
-    uint32_t change_mode[5] = {0, 1, 2, 3, 4};
+    uint32_t change_mode[4] = {0, 1, 2, 3};
 
 signals:
 
