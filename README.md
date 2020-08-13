@@ -28,8 +28,35 @@ vi xbox_auto.sh
 > > + Writing shell scripts.
 > ex)
 ```
-#! /bin/bash
-sudo xboxdrv --silent
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          xboxrun
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Example initscript
+# Description:       Auto connect xboxdrv
+#                    placed in /etc/init.d.
+### END INIT INFO
+
+case "$1" in
+  start)
+	xboxdrv --config /usr/share/doc/xboxdrv/examples/default.xboxdrv
+	;;
+  stop)
+	;;
+  restart)
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+  *)
+	echo "Usage: xboxrun {start|stop|restart|status}" || true
+	exit 1
+esac
+
 exit 0
 ```
 <br/><br/>
@@ -38,7 +65,7 @@ exit 0
 
 >	> + Give permission.     
 ```
-chmod 777 xbox_auto.sh
+chmod +x xboxrun.sh
 ```     
 <br/><br/>
 
@@ -46,7 +73,7 @@ chmod 777 xbox_auto.sh
 
 >	> + Register service.     
 ```
-update-rc.d xbox_auto.sh defaults
+update-rc.d xboxrun.sh defaults
 ```     
 <br/><br/>
 
@@ -58,6 +85,7 @@ reboot
 ```
 <br/><br/>
 
+-----------------
 
 >	> + To connect the Android Smartphone with ROSCORE(Computer),     
 ```
