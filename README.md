@@ -34,29 +34,30 @@ vi xbox_auto.sh
 # Provides:          xboxrun
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: Auto connect xboxdrv
-# Description:       Automatically run this script at boot
+# Default-Start:     3 4 5
+# Default-Stop:      0 1 2 6
+# Short-Description: Example initscript
+# Description:       This file should be used to construct scripts to be
 #                    placed in /etc/init.d.
 ### END INIT INFO
 
+export XBOX_HOME=/usr/share/doc/xboxdrv/examples/
+
 case "$1" in
   start)
-	xboxdrv --config /usr/share/doc/xboxdrv/examples/default.xboxdrv
+	xboxdrv --detach-kernel-driver --config $XBOX_HOME/default.xboxdrv
+	exit 0
 	;;
   stop)
 	;;
   restart)
 	$0 stop
-	sleep 1
 	$0 start
 	;;
   *)
-	echo "Usage: xboxrun {start|stop|restart|status}" || true
+	echo "Usage: xboxrun {start|stop|restart}" || true
 	exit 1
 esac
-
 exit 0
 ```
 <br/>
