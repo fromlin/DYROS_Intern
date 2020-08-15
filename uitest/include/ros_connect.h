@@ -222,6 +222,7 @@ public:
             msg->axes[4] = 1.0;
             msg->axes[5] = 1.0;
         } //axes value of message(joy) initializing
+
         char buf[128];
         char buf2[128];
 
@@ -356,6 +357,12 @@ public:
             if(msg->buttons[4])
                 velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 40.);
 
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -4.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 4.;
+            velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / -8.);  //pelv rot
+            if(msg->buttons[5])
+                velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / 8.);              
+            break;
 
             velcmd_msg.des_vel[3] = (double)msg->axes[2] / -4.;
             velcmd_msg.des_vel[4] = (double)msg->axes[3] / 4.;
