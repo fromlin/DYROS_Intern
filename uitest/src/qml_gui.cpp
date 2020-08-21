@@ -22,7 +22,7 @@ int main(int argc, char** argv)
     //Init Qt
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
-    engine.load(QUrl("qrc:///qml/gui.qml"));       
+    engine.load(QUrl("qrc:/gui.qml"));       
 
     QObject* root = engine.rootObjects()[0];
     ros_connect ros(root, nh);
