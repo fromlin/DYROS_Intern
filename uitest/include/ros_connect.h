@@ -76,7 +76,8 @@ public:
     };
 
     Q_INVOKABLE void move_ros(QString msg)
-    {   //QString str1 = msg;
+    {   velcmd_msg.des_vel.resize(6);
+    //QString str1 = msg;
     //     QByteArray ba = str1.toLocal8Bit();
     //     const char *c_str2 = ba.data();
     std::string str1 = msg.toStdString();
@@ -89,9 +90,37 @@ public:
         if(strcmp(p, "R")){
             axes[0] = 1;
         }
+        if(strcmp(p, "U")){
+            axes[1] = 1;
+        }
+        if(strcmp(p, "D"))
+        {
+            axes[1] = -1;
+        }
+        if(strcmp(p, "RU"))
+        {
+            axes[0] = 1;
+            axes[1] = 1;
+        }
+        if(strcmp(p, "LU"))
+        {
+            axes[0] = -1;
+            axes[1] = 1;
+        }
+        if(strcmp(p, "RD"))
+        {
+            axes[0] = 1;
+            axes[1] = -1;
+        }
+        if(strcmp(p, "LD"))
+        {
+            axes[0] = -1;
+            axes[1] = -1;
+        }
+
         switch (velcmd_msg.task_link) {
         case 0:     // pos : COM rot : pelv 
-           // velcmd_msg.des_vel[0] = axes[1] / 20.;
+            velcmd_msg.des_vel[0] = axes[1] / 20.;
             velcmd_msg.des_vel[1] = axes[0] / 20.;
             // velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -40.);  //com pos
             // if(msg->buttons[4])
@@ -124,7 +153,7 @@ public:
 
 
         case 2:     // righthand
-          // velcmd_msg.des_vel[0] = axes[1] / 2.;
+            velcmd_msg.des_vel[0] = axes[1] / 2.;
             velcmd_msg.des_vel[1] = axes[0] / 2.;
             // velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -4.);  //righthand pos
             // if(msg->buttons[4])
@@ -141,7 +170,7 @@ public:
 
 
         case 3:     // lefthand
-           // velcmd_msg.des_vel[0] = axes[1] / 2.;
+            velcmd_msg.des_vel[0] = axes[1] / 2.;
             velcmd_msg.des_vel[1] = axes[0] / 2.;
             // velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -4.);  //lefthand pos
             // if(msg->buttons[4])

@@ -541,13 +541,13 @@ Page {
         } else if( direction === "D") {
             ros.move_ros("D");
         } else if( direction === "RU") {
-            ros.move_ros("R");
+            ros.move_ros("RU");
         } else if( direction === "LU") {
-            ros.move_ros("L");
+            ros.move_ros("LU");
         } else if( direction === "RD") {
-            ros.move_ros("R");
+            ros.move_ros("RD");
         } else if( direction === "LD") {
-            ros.move_ros("L");
+            ros.move_ros("LD");
         }
     }
       onDirChanged:{
