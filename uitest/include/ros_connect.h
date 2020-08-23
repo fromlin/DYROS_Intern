@@ -33,7 +33,7 @@ class ros_connect : public QObject
 public:
     explicit ros_connect(QObject *parent, ros::NodeHandle &nh)
     {
-        button_pub = nh.advertise<std_msgs::String>("/dyros_red/command", 100);
+        button_pub = nh.advertise<std_msgs::String>("/tocabi/command", 100);
         joint_sub = nh.subscribe("/tocabi/jointstates", 1, &ros_connect::joint_cb, this);
         sensor_sub = nh.subscribe("/mujoco_ros_interface/sensor_states", 1, &ros_connect::sensor_cb, this);
         time_sub = nh.subscribe("/tocabi/time", 1, &ros_connect::time_cb, this);
@@ -57,20 +57,20 @@ public:
         std::sprintf(buf2, "t%d", 1);
         m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
     };
+
     Q_INVOKABLE void click_ros(QString msg)
-    {   //QString str1 = msg;
-    //     QByteArray ba = str1.toLocal8Bit();
-    //     const char *c_str2 = ba.data();
-    std::string str1 = msg.toStdString();
-    const char* p = str1.c_str();
-       
-        if(strcmp(p, "left")){
+    {
+        std::string str1 = msg.toStdString();
+        const char *p = str1.c_str();
+
+        if (strcmp(p, "left"))
+        {
             ChangeConMode(-1);
         }
-        if(strcmp(p, "right")){
+        if (strcmp(p, "right"))
+        {
             ChangeConMode(1);
         }
-        
 
         velcommand_pub.publish(velcmd_msg);
     };
@@ -145,14 +145,6 @@ public:
 
         velcommand_pub.publish(velcmd_msg);
     };
-// 이 함수는 조이스틱 노트를 그대로 따라하도록 설계되어야함. click move 라는 함수를 만들어서 어떠한 스트링을 받았을때 그에 맞는 컨트롤을 퍼브할수있도록 설계.
-// void ChangeConMode(int data)
-    // {
-    //     mode_index -= data;
-    //     if(mode_index > 3)      mode_index = 0;
-    //     if(mode_index < 0)      mode_index = 3;
-    //     velcmd_msg.task_link = change_mode[mode_index];
-    // }
 
     Q_INVOKABLE void button_ros(int id, QString msg)
     {
@@ -385,9 +377,9 @@ public:
             TaskHandle();
         if(msg->buttons[8])
             EmergencyOff();
-        if (msg->axes[6] != 0) {
-            if (msg->axes[6] < 0)       ChangeConMode(-1);
-            else if (msg->axes[6] >0)   ChangeConMode(1);
+        if (msg->axes[7] != 0) {
+            if (msg->axes[7] < 0)       ChangeConMode(-1);
+            else if (msg->axes[7] >0)   ChangeConMode(1);
         }
         VelocityHandle(msg);
     };
