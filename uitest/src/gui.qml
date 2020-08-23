@@ -10,27 +10,54 @@ ApplicationWindow {
     height: 600
     title: qsTr("Tocabi Controller")
 
-    SwipeView {
-        id: swipeView
+    //    SwipeView {
+    //        id: swipeView2
+    //        anchors.fill: parent
+    //        currentIndex: tabBar.currentIndex
+
+    SwipeView{
+        id: swipeView1
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
+
+        onCurrentIndexChanged: {
+            if (currentIndex == 3) {
+                Qt.callLater(function() { interactive = false })
+            } else {
+                Qt.callLater(function() { interactive = true })
+            }
+        }
+        Initializer{
+        }
 
         Status {
         }
 
         JoystickCheck {
         }
+
+        VirtualJoy {
+
+        }
     }
+    //    }
 
     footer: TabBar {
         id: tabBar
-        currentIndex: swipeView.currentIndex
+        currentIndex: swipeView1.currentIndex
+
+        TabButton {
+            text: qsTr("Initializer")
+        }
 
         TabButton {
             text: qsTr("Status")
         }
         TabButton {
-            text: qsTr("JoystickCheck")
+            text: qsTr("Joystick Check")
+        }
+        TabButton {
+            text: qsTr("Virtual Joy")
         }
     }
 }
