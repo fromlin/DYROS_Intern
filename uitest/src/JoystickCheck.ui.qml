@@ -5,13 +5,10 @@ Page {
     width: 1024
     height: 600
 
-    header: Label {
-        text: qsTr("Joystick Check")
-        font.pixelSize: Qt.application.font.pixelSize * 2
-        padding: 10
-    }
-
     Frame {
+        // property int offset: 30
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
         id: frame10
         x: 23
         y: 6
