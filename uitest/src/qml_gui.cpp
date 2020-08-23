@@ -16,7 +16,6 @@ int main(int argc, char** argv)
     //Init ros stuff
     ros::init(argc, argv, "qml_gui");
     ros::NodeHandle nh;
-    // ros::Publisher pub = nh.advertise<std_msgs::String>("/ui_topic",100);
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     //Init Qt

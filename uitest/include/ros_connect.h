@@ -57,6 +57,102 @@ public:
         std::sprintf(buf2, "t%d", 1);
         m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
     };
+    Q_INVOKABLE void click_ros(QString msg)
+    {   //QString str1 = msg;
+    //     QByteArray ba = str1.toLocal8Bit();
+    //     const char *c_str2 = ba.data();
+    std::string str1 = msg.toStdString();
+    const char* p = str1.c_str();
+       
+        if(strcmp(p, "left")){
+            ChangeConMode(-1);
+        }
+        if(strcmp(p, "right")){
+            ChangeConMode(1);
+        }
+        
+
+        velcommand_pub.publish(velcmd_msg);
+    };
+
+    Q_INVOKABLE void move_ros(QString msg)
+    {
+        velcmd_msg.des_vel.resize(6);
+        std::string str1 = msg.toStdString();
+        const char *p = str1.c_str();
+        double axes[3];
+
+        if (strcmp(p, "L"))
+        {
+            axes[0] = -1;
+        }
+        if (strcmp(p, "R"))
+        {
+            axes[0] = 1;
+        }
+        if (strcmp(p, "U"))
+        {
+            axes[1] = 1;
+        }
+        if (strcmp(p, "D"))
+        {
+            axes[1] = -1;
+        }
+        if (strcmp(p, "RU"))
+        {
+            axes[0] = 1;
+            axes[1] = 1;
+        }
+        if (strcmp(p, "LU"))
+        {
+            axes[0] = -1;
+            axes[1] = 1;
+        }
+        if (strcmp(p, "RD"))
+        {
+            axes[0] = 1;
+            axes[1] = -1;
+        }
+        if (strcmp(p, "LD"))
+        {
+            axes[0] = -1;
+            axes[1] = -1;
+        }
+
+        switch (velcmd_msg.task_link)
+        {
+        case 0: // pos : COM rot : pelv
+            velcmd_msg.des_vel[0] = axes[1] / 20.;
+            velcmd_msg.des_vel[1] = axes[0] / 20.;
+            break;
+
+        case 1: // rot : upperbody
+            break;
+
+        case 2: // righthand
+            velcmd_msg.des_vel[0] = axes[1] / 2.;
+            velcmd_msg.des_vel[1] = axes[0] / 2.;
+            break;
+
+        case 3: // lefthand
+            velcmd_msg.des_vel[0] = axes[1] / 2.;
+            velcmd_msg.des_vel[1] = axes[0] / 2.;
+            break;
+
+        default:
+            break;
+        }
+
+        velcommand_pub.publish(velcmd_msg);
+    };
+// 이 함수는 조이스틱 노트를 그대로 따라하도록 설계되어야함. click move 라는 함수를 만들어서 어떠한 스트링을 받았을때 그에 맞는 컨트롤을 퍼브할수있도록 설계.
+// void ChangeConMode(int data)
+    // {
+    //     mode_index -= data;
+    //     if(mode_index > 3)      mode_index = 0;
+    //     if(mode_index < 0)      mode_index = 3;
+    //     velcmd_msg.task_link = change_mode[mode_index];
+    // }
 
     Q_INVOKABLE void button_ros(int id, QString msg)
     {
@@ -65,6 +161,7 @@ public:
 
         button_pub.publish(msg_);
     };
+    
 
     Q_INVOKABLE void switch_ros(int id, char *msg){
 
@@ -216,8 +313,13 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    void joystick_cb(const sensor_msgs::Joy::ConstPtr &msg)
+    void joystick_cb(const sensor_msgs::Joy::Ptr &msg)
     {
+        if((msg->axes[4] == 0.0) || (msg->axes[5] == 0.0)){
+            msg->axes[4] = 1.0;
+            msg->axes[5] = 1.0;
+        } //axes value of message(joy) initializing
+
         char buf[128];
         char buf2[128];
 
@@ -235,7 +337,7 @@ public:
             std::sprintf(buf2, "p%d", i + 44);
             m_Q->findChild<QObject *>(buf2)->setProperty("value", dot / 200.0 + 0.5);
         }
-        for (int i = 4; i < 6; i++)
+        for (int i = 4; i < 6; i++)     //L2, R2
         {
             std::sprintf(buf2, "b%d", i + 2);
             if (msg->axes[i] < 0.0)
@@ -277,9 +379,9 @@ public:
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
 
-        if (msg->buttons[4])
+        if (msg->buttons[6])
             StateInitHandle();
-        if (msg->buttons[5])
+        if (msg->buttons[7])
             TaskHandle();
         if(msg->buttons[8])
             EmergencyOff();
@@ -287,7 +389,6 @@ public:
             if (msg->axes[6] < 0)       ChangeConMode(-1);
             else if (msg->axes[6] >0)   ChangeConMode(1);
         }
-
         VelocityHandle(msg);
     };
 
@@ -346,33 +447,69 @@ public:
         velcmd_msg.des_vel.resize(6);
 
         switch (velcmd_msg.task_link) {
-        case 0:             // upper body
-            velcmd_msg.des_vel[0] = (double)msg->axes[0] / -2.;
-            velcmd_msg.des_vel[1] = (double)msg->axes[1] / 2.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[4] + 1.) / 4.)
-                                  - (((double)msg->axes[5] + 1.) / 4.);
+        case 0:     // pos : COM rot : pelv 
+            velcmd_msg.des_vel[0] = (double)msg->axes[1] / 20.;
+            velcmd_msg.des_vel[1] = (double)msg->axes[0] / 20.;
+            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -40.);  //com pos
+            if(msg->buttons[4])
+                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 40.);
+
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -4.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 4.;
+            velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / -8.);  //pelv rot
+            if(msg->buttons[5])
+                velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / 8.);              
             break;
-        case 1:             // right hand
+
+
+            
+        case 1:     // rot : upperbody
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / 4.);  //upperbody rot
+            if(msg->buttons[5])
+                velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / -4.);
+            break;
+
+
+
+        case 2:     // righthand
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
             velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[5] + 1.) / 4.)
-                                  - (((double)msg->axes[4] + 1.) / 4.);
+            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -4.);  //righthand pos
+            if(msg->buttons[4])
+                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 4.);              
+
+
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / 4.);  //righthand rot
+            if(msg->buttons[5])
+                velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / -4.);                
             break;
-        case 2:
-            break;
-        case 3:             // left hand
+
+
+
+        case 3:     // lefthand
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
             velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[5] + 1.) / 4.)
-                                  - (((double)msg->axes[4] + 1.) / 4.);
+            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -4.);  //lefthand pos
+            if(msg->buttons[4])
+                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 4.);
+
+
+            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / 4.);  //lefthand rot
+            if(msg->buttons[5])
+                velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / -4.);
             break;
-        case 4:
-            break;
+
+
         default:
             break;
 
         }
-
         velcommand_pub.publish(velcmd_msg);
     }
 
@@ -388,8 +525,8 @@ public:
     void ChangeConMode(int data)
     {
         mode_index -= data;
-        if(mode_index > 4)      mode_index = 0;
-        if(mode_index < 0)      mode_index = 4;
+        if(mode_index > 3)      mode_index = 0;
+        if(mode_index < 0)      mode_index = 3;
         velcmd_msg.task_link = change_mode[mode_index];
     }
 
@@ -435,7 +572,7 @@ public:
 protected:
     QObject *m_Q;
     int mode_index = 0;
-    uint32_t change_mode[5] = {0, 1, 2, 3, 4};
+    uint32_t change_mode[4] = {0, 1, 2, 3};
 
 signals:
 
