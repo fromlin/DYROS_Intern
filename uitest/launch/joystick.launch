@@ -1,0 +1,17 @@
+<launch>
+
+    <node name="qml_gui" pkg="uitest" type="qml_gui" output="screen">
+    </node>
+
+    <node name="joy_node" pkg="joy_sub" type="joy_node">
+    </node>
+
+    <node name="test_red" pkg="uitest" type="test_red" output="screen">
+    </node>
+    
+    <!-- <node name="joy_value" pkg="joy_sub" type="joy_value.py" output="screen">
+    </node>
+    <node name="joy_pub" pkg="joy_sub" type="joy_value.py" output="screen">
+    </node> -->
+
+</launch>

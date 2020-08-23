@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>gui.qml</file>
+        <file>Status.ui.qml</file>
+        <file>JoystickCheck.ui.qml</file>
+        <!-- <file>gui.qml</file> -->
+        <file>qtquickcontrols2.conf</file>
+    </qresource>
+</RCC>
