@@ -53,48 +53,50 @@ Page {
                 id: mouseArea1
                 anchors.fill: parent
 
-                //                onPressed: {
-                //                    leftjoyStick.pressed()
-                //                }
+                                onPressed: {
+                                    leftjoyStick.pressed()
+                                }
 
-                //                onPositionChanged: {
-                //                    //(x-center_x)^2 + (y - center_y)^2 < radius^2
-                //                    //if stick need to remain inside larger circle
-                //                    //var rad = (totalArea.radius - stick.radius);
-                //                    //if stick can go outside larger circle
-                //                    var rad = totalArea1.radius
-                //                    rad = rad * rad
+                                onPositionChanged: {
+                                    //(x-center_x)^2 + (y - center_y)^2 < radius^2
+                                    //if stick need to remain inside larger circle
+                                    //var rad = (totalArea.radius - stick.radius);
+                                    //if stick can go outside larger circle
+                                    var rad = totalArea1.radius
+                                    rad = rad * rad
 
-                //                    // calculate distance in x direction
-                //                    var xDist = mouseX - (totalArea1.x + totalArea1.radius)
-                //                    xDist = xDist * xDist
+                                    // calculate distance in x direction
+                                    var xDist = mouseX - (totalArea1.x + totalArea1.radius)
+                                    xDist = xDist * xDist
 
-                //                    // calculate distance in y direction
-                //                    var yDist = mouseY - (totalArea1.y + totalArea1.radius)
-                //                    yDist = yDist * yDist
+                                    // calculate distance in y direction
+                                    var yDist = mouseY - (totalArea1.y + totalArea1.radius)
+                                    yDist = yDist * yDist
 
-                //                    //total distance for inner circle
-                //                    var dist = xDist + yDist
+                                    //total distance for inner circle
+                                    var dist = xDist + yDist
 
-                //                    //if distance if less then radius then inner circle is inside larger circle
-                //                    if (rad < dist) {
-                //                        return
-                //                    }
+                                    //if distance if less then radius then inner circle is inside larger circle
+                                    if (rad < dist) {
+                                        return
+                                    }
 
-                //                    //center of larger circle
-                //                    var oldX = stick1.x
-                //                    var oldY = stick1.y
-                //                    stick1.x = mouseX - stick1.radius
-                //                    stick1.y = mouseY - stick1.radius
-                //                }
+                                    //center of larger circle
+                                    var oldX = stick1.x
+                                    var oldY = stick1.y
+                                    stick1.x = mouseX - stick1.radius
+                                    stick1.y = mouseY - stick1.radius
+                                    ros.virjoy(stick1.x , stick1.y, 0)
+                                }
 
-                //                onReleased: {
-                //                    //snap to center
-                //                    stick1.x = totalArea1.width / 2 - stick1.radius
-                //                    stick1.y = totalArea1.height / 2 - stick1.radius
-
-                //                    leftjoyStick.released()
-                //                }
+                                onReleased: {
+                                    //snap to center
+                                    stick1.x = totalArea1.width / 2 - stick1.radius
+                                    stick1.y = totalArea1.height / 2 - stick1.radius
+                                    ros.virjoy(stick1.x , stick1.y, 0)
+                                    
+                                    leftjoyStick.released()
+                                }
             }
 
             //            onDirChanged: {
@@ -151,48 +153,50 @@ Page {
                 id: mouseArea2
                 anchors.fill: parent
 
-                //                onPressed: {
-                //                    leftjoyStick.pressed()
-                //                }
+                                onPressed: {
+                                    rightjoyStick.pressed()
+                                }
 
-                //                onPositionChanged: {
-                //                    //(x-center_x)^2 + (y - center_y)^2 < radius^2
-                //                    //if stick need to remain inside larger circle
-                //                    //var rad = (totalArea.radius - stick.radius);
-                //                    //if stick can go outside larger circle
-                //                    var rad = totalArea2.radius
-                //                    rad = rad * rad
+                                onPositionChanged: {
+                                    //(x-center_x)^2 + (y - center_y)^2 < radius^2
+                                    //if stick need to remain inside larger circle
+                                    //var rad = (totalArea.radius - stick.radius);
+                                    //if stick can go outside larger circle
+                                    var rad = totalArea2.radius
+                                    rad = rad * rad
 
-                //                    // calculate distance in x direction
-                //                    var xDist = mouseX - (totalArea2.x + totalArea2.radius)
-                //                    xDist = xDist * xDist
+                                    // calculate distance in x direction
+                                    var xDist = mouseX - (totalArea2.x + totalArea2.radius)
+                                    xDist = xDist * xDist
 
-                //                    // calculate distance in y direction
-                //                    var yDist = mouseY - (totalArea2.y + totalArea2.radius)
-                //                    yDist = yDist * yDist
+                                    // calculate distance in y direction
+                                    var yDist = mouseY - (totalArea2.y + totalArea2.radius)
+                                    yDist = yDist * yDist
 
-                //                    //total distance for inner circle
-                //                    var dist = xDist + yDist
+                                    //total distance for inner circle
+                                    var dist = xDist + yDist
 
-                //                    //if distance if less then radius then inner circle is inside larger circle
-                //                    if (rad < dist) {
-                //                        return
-                //                    }
+                                    //if distance if less then radius then inner circle is inside larger circle
+                                    if (rad < dist) {
+                                        return
+                                    }
 
-                //                    //center of larger circle
-                //                    var oldX = stick2.x
-                //                    var oldY = stick2.y
-                //                    stick2.x = mouseX - stick2.radius
-                //                    stick2.y = mouseY - stick2.radius
-                //                }
+                                    //center of larger circle
+                                    var oldX = stick2.x
+                                    var oldY = stick2.y
+                                    stick2.x = mouseX - stick2.radius
+                                    stick2.y = mouseY - stick2.radius
+                                    ros.virjoy(stick2.x , stick2.y, 2)
+                                }
 
-                //                onReleased: {
-                //                    //snap to center
-                //                    stick2.x = totalArea2.width / 2 - stick2.radius
-                //                    stick2.y = totalArea2.height / 2 - stick2.radius
+                                onReleased: {
+                                    //snap to center
+                                    stick2.x = totalArea2.width / 2 - stick2.radius
+                                    stick2.y = totalArea2.height / 2 - stick2.radius
+                                    ros.virjoy(stick2.x , stick2.y, 2)
 
-                //                    leftjoyStick.released()
-                //                }
+                                    rightjoyStick.released()
+                                }
             }
 
             //            onDirChanged: {
@@ -220,12 +224,14 @@ Page {
             anchors.left: parent.left
             anchors.leftMargin: 8
             background: Rectangle {
-                radius: button.radius
+                //radius: button.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
                 color: "gray"
             }
+            onClicked:
+            ros.click_ros("left")
         }
 
         Button {
@@ -238,12 +244,14 @@ Page {
             anchors.right: parent.right
             anchors.rightMargin: 8
             background: Rectangle {
-                radius: button1.radius
+                //radius: button1.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
                 color: "gray"
             }
+            onClicked:
+            ros.click_ros("right")
         }
 
         Button {
@@ -255,7 +263,7 @@ Page {
             anchors.top: parent.top
             anchors.topMargin: 8
             background: Rectangle {
-                radius: button2.radius
+                //radius: button2.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -273,7 +281,7 @@ Page {
             anchors.bottomMargin: 8
             anchors.horizontalCenter: parent.horizontalCenter
             background: Rectangle {
-                radius: button3.radius
+                //radius: button3.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -309,6 +317,8 @@ Page {
                 border.color: "#30f13e"
                 color: "#dcded8"
             }
+            onClicked:
+            ros.vir_EmergencyOff()
 
             Text {
                 id: element
@@ -339,6 +349,9 @@ Page {
                 opacity: 0.5
                 color: "gray"
             }
+            onClicked:
+            ros.vir_StateInitHandle()
+
         }
 
         RoundButton {
@@ -358,6 +371,9 @@ Page {
                 opacity: 0.5
                 color: "gray"
             }
+            onClicked:
+            ros.vir_TaskHandle()
+
         }
     }
 
@@ -469,6 +485,18 @@ Page {
             anchors.leftMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             value: 0
+            stepSize : 0.01
+            snapMode: Slider.SnapOnRelease
+            
+            pressed: true
+
+            
+            
+            onValueChanged:
+            ros.virjoy(value,0,4)
+            
+            
+            
         }
 
         Slider {
@@ -478,12 +506,18 @@ Page {
             width: 230
             height: 40
             orientation: Qt.Horizontal
-            stepSize: 0
             from: -1
             anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
             value: 0
+            stepSize: 0.01
+            snapMode: Slider.SnapOnRelease
+
+            onValueChanged:
+            ros.virjoy(value,0,5)
+
+            
         }
     }
 
