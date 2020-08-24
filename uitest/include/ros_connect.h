@@ -106,14 +106,14 @@ public:
 
         switch (velcmd_msg.task_link) {
         case 0:     // pos : COM rot : pelv 
-            velcmd_msg.des_vel[0] = axes[1] / 20.;
-            velcmd_msg.des_vel[1] = axes[0] / 20.;
-            velcmd_msg.des_vel[2] = ((axes[4]) / -40.);  //com pos
+            velcmd_msg.des_vel[0] = axes[1] / -20.;
+            velcmd_msg.des_vel[1] = axes[0] / -20.;
+            velcmd_msg.des_vel[2] = ((axes[4]) / 40.);  //com pos
             // if(msg->buttons[4])
             //     velcmd_msg.des_vel[2] = ((axes[4] - 1.) / 40.);
 
-            velcmd_msg.des_vel[3] = axes[2] / -4.;
-            velcmd_msg.des_vel[4] = axes[3] / 4.;
+            velcmd_msg.des_vel[3] = axes[2] / 4.;
+            velcmd_msg.des_vel[4] = axes[3] / -4.;
             velcmd_msg.des_vel[5] = ((axes[5]) / -8.);  //pelv rot
             // if(msg->buttons[5])
             //     velcmd_msg.des_vel[5] = ((axes[5] - 1.) / 8.);              
@@ -125,9 +125,9 @@ public:
             velcmd_msg.des_vel[0] = 0;
             velcmd_msg.des_vel[1] = 0;
             velcmd_msg.des_vel[2] = 0;
-            velcmd_msg.des_vel[3] = axes[2] / -2.;
-            velcmd_msg.des_vel[4] = axes[3] / 2.;
-            velcmd_msg.des_vel[5] = ((axes[5]) / 4.);  //upperbody rot
+            velcmd_msg.des_vel[3] = axes[2] / 2.;
+            velcmd_msg.des_vel[4] = axes[3] / -2.;
+            velcmd_msg.des_vel[5] = ((axes[5]) / -4.);  //upperbody rot
             // if(msg->buttons[5])
             //     velcmd_msg.des_vel[5] = ((axes[5] - 1.) / -4.);
             break;
@@ -135,16 +135,16 @@ public:
 
 
         case 2:     // righthand
-            velcmd_msg.des_vel[0] = axes[1] / 2.;
-            velcmd_msg.des_vel[1] = axes[0] / 2.;
-            velcmd_msg.des_vel[2] = ((axes[4]) / -4.);  //righthand pos
+            velcmd_msg.des_vel[0] = axes[1] / -2.;
+            velcmd_msg.des_vel[1] = axes[0] / -2.;
+            velcmd_msg.des_vel[2] = ((axes[4]) / 4.);  //righthand pos
             // if(msg->buttons[4])
             //     velcmd_msg.des_vel[2] = ((axes[4] - 1.) / 4.);              
 
 
-            velcmd_msg.des_vel[3] = axes[2] / -2.;
-            velcmd_msg.des_vel[4] = axes[3] / 2.;
-            velcmd_msg.des_vel[5] = ((axes[5]) / 4.);  //righthand rot
+            velcmd_msg.des_vel[3] = axes[2] / 2.;
+            velcmd_msg.des_vel[4] = axes[3] / -2.;
+            velcmd_msg.des_vel[5] = ((axes[5]) / -4.);  //righthand rot
             // if(msg->buttons[5])
             //     velcmd_msg.des_vel[5] = ((axes[5] - 1.) / -4.);                
             break;
@@ -152,16 +152,16 @@ public:
 
 
         case 3:     // lefthand
-            velcmd_msg.des_vel[0] = axes[1] / 2.;
-            velcmd_msg.des_vel[1] = axes[0] / 2.;
-            velcmd_msg.des_vel[2] = ((axes[4]) / -4.);  //lefthand pos
+            velcmd_msg.des_vel[0] = axes[1] / -2.;
+            velcmd_msg.des_vel[1] = axes[0] / -2.;
+            velcmd_msg.des_vel[2] = ((axes[4]) / 4.);  //lefthand pos
             // if(msg->buttons[4])
             //     velcmd_msg.des_vel[2] = ((axes[4] - 1.) / 4.);
 
 
-            velcmd_msg.des_vel[3] = axes[2] / -2.;
-            velcmd_msg.des_vel[4] = axes[3] / 2.;
-            velcmd_msg.des_vel[5] = ((axes[5]) / 4.);  //lefthand rot
+            velcmd_msg.des_vel[3] = axes[2] / 2.;
+            velcmd_msg.des_vel[4] = axes[3] / -2.;
+            velcmd_msg.des_vel[5] = ((axes[5]) / -4.);  //lefthand rot
             // if(msg->buttons[5])
             //     velcmd_msg.des_vel[5] = ((axes[5] - 1.) / -4.);
             break;
