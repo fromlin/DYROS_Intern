@@ -386,12 +386,6 @@ Page {
             background: Rectangle {
                 radius: roundButton3.radius
                 color: "#13aa04"
-
-                onClipChanged: ColorAnimation {
-                    from: "#13aa04"
-                    to: "black"
-                    duration: 200
-                }
             }
         }
 
@@ -502,8 +496,8 @@ Page {
 /*##^##
 Designer {
     D{i:3;anchors_height:150;anchors_width:150}D{i:1;anchors_x:25}D{i:12;anchors_x:8}
-D{i:16;anchors_y:0}D{i:24;anchors_x:5}D{i:34;anchors_x:73}D{i:36;anchors_y:0}D{i:39;anchors_x:9}
-D{i:38;anchors_width:974;anchors_x:25}
+D{i:16;anchors_y:0}D{i:24;anchors_x:5}D{i:33;anchors_x:73}D{i:35;anchors_y:0}D{i:38;anchors_x:9}
+D{i:37;anchors_width:974;anchors_x:25}
 }
 ##^##*/
 
