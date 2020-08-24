@@ -1066,7 +1066,7 @@ Page {
         y: 42
         width: 162
         height: 40
-        currentIndex: swipeView.currentIndex
+        currentIndex: swipeView1.currentIndex
 
         TabButton {
             text: 'test 1 '
