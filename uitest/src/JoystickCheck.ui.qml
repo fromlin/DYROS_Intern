@@ -321,8 +321,9 @@ Page {
         ProgressBar {
             id: p48
             x: 7
-            y: 18
+            y: 7
             height: 7
+            to: 1
             from: -1
             objectName: "p48"
             value: 0
@@ -331,9 +332,8 @@ Page {
         ProgressBar {
             id: p49
             x: 240
-            y: 6
-            width: 200
-            height: 19
+            y: 7
+            height: 7
             to: 1
             from: -1
             objectName: "p49"

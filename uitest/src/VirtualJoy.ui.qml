@@ -475,13 +475,14 @@ Page {
         Slider {
             id: slider
             y: 13
-            width: 230
-            height: 40
+            width: 40
+            height: 230
+            orientation: Qt.Vertical
             from: -1
             anchors.left: parent.left
             anchors.leftMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
             value: 0
+            anchors.verticalCenter: parent.verticalCenter
             stepSize : 0.01
             snapMode: Slider.SnapOnRelease
             
@@ -494,11 +495,11 @@ Page {
 
         Slider {
             id: slider1
-            x: 732
+            x: 863
             y: 11
-            width: 230
-            height: 40
-            orientation: Qt.Horizontal
+            width: 40
+            height: 230
+            orientation: Qt.Vertical
             from: -1
             anchors.right: parent.right
             anchors.rightMargin: 10
