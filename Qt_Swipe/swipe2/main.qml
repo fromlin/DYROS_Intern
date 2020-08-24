@@ -8,15 +8,11 @@ ApplicationWindow {
     visible: true
     width: 1024
     height: 600
+
     title: qsTr("Tocabi Controller")
 
-    //    SwipeView {
-    //        id: swipeView2
-    //        anchors.fill: parent
-    //        currentIndex: tabBar.currentIndex
-
     SwipeView{
-        id: swipeView1
+        id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
@@ -27,6 +23,7 @@ ApplicationWindow {
                 Qt.callLater(function() { interactive = true })
             }
         }
+        
         Initializer{
         }
 
@@ -37,14 +34,12 @@ ApplicationWindow {
         }
 
         VirtualJoy {
-
         }
     }
-    //    }
 
     footer: TabBar {
         id: tabBar
-        currentIndex: swipeView1.currentIndex
+        currentIndex: swipeView.currentIndex
 
         TabButton {
             text: qsTr("Initializer")

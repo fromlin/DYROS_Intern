@@ -74,6 +74,7 @@ public:
 
         velcommand_pub.publish(velcmd_msg);
     };
+    
     Q_INVOKABLE void vir_StateInitHandle()
     {
         StateInitHandle();
@@ -344,28 +345,38 @@ public:
 
         char buf[128];
         char buf2[128];
+        float dot;
 
         // axes
         for (int i = 0; i < 4; i++)
         {
-            float dot = (msg->axes[i]) * 100.0;
+            dot = msg->axes[i];
+            if((i==1) || (i==3))    std::sprintf(buf, "%8.3f", dot);
+            else                    std::sprintf(buf, "%8.3f", -dot);
+            std::sprintf(buf2, "t%d", i + 46);
+            m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
+
+            std::sprintf(buf, "#%02X0000", (int)(pp(dot * 100.0) * 256.0));
+            m_Q->findChild<QObject *>(buf2)->setProperty("color", buf);
+
+            std::sprintf(buf2, "p%d", i + 44);
+            if((i==1) || (i==3))    m_Q->findChild<QObject *>(buf2)->setProperty("value", dot);
+            else                    m_Q->findChild<QObject *>(buf2)->setProperty("value", -dot);
+        }
+
+        for (int i = 4; i < 6; i++)     //L2, R2
+        {
+            if(msg->buttons[i])     dot = (msg->axes[i] / 2.0) - 0.5;
+            else                    dot = (msg->axes[i] / -2.0) + 0.5;
             std::sprintf(buf, "%8.3f", dot);
             std::sprintf(buf2, "t%d", i + 46);
             m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
 
-            std::sprintf(buf, "#%02X0000", (int)(pp(dot) * 256.0));
+            std::sprintf(buf, "#%02X0000", (int)(pp(dot * 100.0) * 256.0));
             m_Q->findChild<QObject *>(buf2)->setProperty("color", buf);
 
             std::sprintf(buf2, "p%d", i + 44);
-            m_Q->findChild<QObject *>(buf2)->setProperty("value", dot / 200.0 + 0.5);
-        }
-        for (int i = 4; i < 6; i++)     //L2, R2
-        {
-            std::sprintf(buf2, "b%d", i + 2);
-            if (msg->axes[i] < 0.0)
-                m_Q->findChild<QObject *>(buf2)->setProperty("checked", true);
-            else
-                m_Q->findChild<QObject *>(buf2)->setProperty("checked", false);
+            m_Q->findChild<QObject *>(buf2)->setProperty("value", dot);
         }
 
         for (int i = 8; i < 10; i++)

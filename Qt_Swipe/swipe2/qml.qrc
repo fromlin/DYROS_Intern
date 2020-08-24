@@ -7,5 +7,6 @@
         <file>qtquickcontrols2.conf</file>
         <file>VirtualJoy.ui.qml</file>
         <file>Initializer.ui.qml</file>
+
     </qresource>
 </RCC>

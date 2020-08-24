@@ -9,6 +9,7 @@ Page {
     height: 600
     title: qsTr("UI")
 
+
     Frame {
         id: frame5
         x: 613
@@ -17,7 +18,7 @@ Page {
         height: 226
         padding: 0
 
-        Canvas {
+        Canvas{
             id: leftfoot
             objectName: "can1"
             x: -20
@@ -25,9 +26,10 @@ Page {
             width: 445
             height: 287
             onPaint: {
-                var ctx = getContext("2d")
-                ctx.fillStyle = Qt.rgba(1, 0, 0, 1)
-                ctx.fillRect(ros.tt, 0, 50, 50)
+                var ctx=getContext("2d");
+                ctx.fillStyle=Qt.rgba(1,0,0,1);
+                ctx.fillRect(ros.tt,0,50,50);
+
             }
 
             Image {
@@ -38,7 +40,9 @@ Page {
                 height: 100
                 //                source: "qrc:/qtquickplugin/images/template_image.png"
             }
+
         }
+
 
         Rectangle {
             id: rectangle
@@ -96,6 +100,8 @@ Page {
             rotation: 0
             z: 4
         }
+
+
     }
 
 
@@ -108,8 +114,11 @@ Page {
 
         onTriggered: {
             ros.update();
+
+
         }
     }
+
 
     Frame {
         id: frame
@@ -372,6 +381,7 @@ Page {
             y: 0
             objectName: "p24"
             value: 0.5
+
         }
 
         ProgressBar {
@@ -490,6 +500,7 @@ Page {
             objectName: "t29"
             horizontalAlignment: Text.AlignRight
         }
+
 
         Text {
             id: t27
@@ -1033,10 +1044,12 @@ Page {
         y: 42
         text: qsTr("Task")
         onClicked: {
+
             ros.button_ros(1,"task");
         }
     }
-    
+
+
     Text {
         id: text10
         x: 613
@@ -1046,14 +1059,14 @@ Page {
     }
 
 
+
     TabBar {
         id: tabBar
         x: 848
         y: 42
         width: 162
         height: 40
-        currentIndex: swipeView1.currentIndex
-        
+        currentIndex: swipeView.currentIndex
 
         TabButton {
             text: 'test 1 '

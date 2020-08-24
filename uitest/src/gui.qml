@@ -16,7 +16,7 @@ ApplicationWindow {
     //        currentIndex: tabBar.currentIndex
 
     SwipeView{
-        id: swipeView1
+        id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
@@ -37,14 +37,12 @@ ApplicationWindow {
         }
 
         VirtualJoy {
-
         }
     }
-    //    }
 
     footer: TabBar {
         id: tabBar
-        currentIndex: swipeView1.currentIndex
+        currentIndex: swipeView.currentIndex
 
         TabButton {
             text: qsTr("Initializer")

@@ -94,7 +94,7 @@ Page {
                                     stick1.x = totalArea1.width / 2 - stick1.radius
                                     stick1.y = totalArea1.height / 2 - stick1.radius
                                     ros.virjoy(stick1.x , stick1.y, 0)
-                                    
+
                                     leftjoyStick.released()
                                 }
             }
@@ -207,7 +207,7 @@ Page {
 
     Frame {
         id: frame
-        x: 45
+        x: 121
         y: 107
         width: 200
         height: 200
@@ -224,7 +224,7 @@ Page {
             anchors.left: parent.left
             anchors.leftMargin: 8
             background: Rectangle {
-                //radius: button.radius
+                radius: button.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -244,7 +244,7 @@ Page {
             anchors.right: parent.right
             anchors.rightMargin: 8
             background: Rectangle {
-                //radius: button1.radius
+                radius: button1.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -263,7 +263,7 @@ Page {
             anchors.top: parent.top
             anchors.topMargin: 8
             background: Rectangle {
-                //radius: button2.radius
+                radius: button2.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -281,7 +281,7 @@ Page {
             anchors.bottomMargin: 8
             anchors.horizontalCenter: parent.horizontalCenter
             background: Rectangle {
-                //radius: button3.radius
+                radius: button3.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -351,7 +351,6 @@ Page {
             }
             onClicked:
             ros.vir_StateInitHandle()
-
         }
 
         RoundButton {
@@ -373,13 +372,12 @@ Page {
             }
             onClicked:
             ros.vir_TaskHandle()
-
         }
     }
 
     Frame {
         id: frame2
-        x: 779
+        x: 698
         y: 125
         width: 200
         height: 200
@@ -402,7 +400,6 @@ Page {
             background: Rectangle {
                 radius: roundButton3.radius
                 color: "#13aa04"
-
                 onClipChanged: ColorAnimation {
                     from: "#13aa04"
                     to: "black"
@@ -469,7 +466,7 @@ Page {
     Frame {
         id: frame3
         y: 19
-        height: 74
+        height: 312
         anchors.left: parent.left
         anchors.leftMargin: 30
         anchors.right: parent.right
@@ -490,13 +487,9 @@ Page {
             
             pressed: true
 
-            
-            
             onValueChanged:
             ros.virjoy(value,0,4)
-            
-            
-            
+
         }
 
         Slider {
@@ -516,8 +509,6 @@ Page {
 
             onValueChanged:
             ros.virjoy(value,0,5)
-
-            
         }
     }
 
