@@ -3,21 +3,37 @@ import QtQuick.Window 2.3
 import QtQuick.Controls 2.2
 import QtQuick.Dialogs 1.2
 import QtQml 2.2
+
 ApplicationWindow {
     visible: true
     width: 1024
     height: 600
-    title: qsTr("Tabs")
 
-    SwipeView {
+    title: qsTr("Tocabi Controller")
+
+    SwipeView{
         id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
 
-        Page1Form {
+        onCurrentIndexChanged: {
+            if (currentIndex == 3) {
+                Qt.callLater(function() { interactive = false })
+            } else {
+                Qt.callLater(function() { interactive = true })
+            }
+        }
+        
+        Initializer{
         }
 
-        Page2Form {
+        Status {
+        }
+
+        JoystickCheck {
+        }
+
+        VirtualJoy {
         }
     }
 
@@ -26,10 +42,17 @@ ApplicationWindow {
         currentIndex: swipeView.currentIndex
 
         TabButton {
-            text: qsTr("Page 1")
+            text: qsTr("Initializer")
+        }
+
+        TabButton {
+            text: qsTr("Status")
         }
         TabButton {
-            text: qsTr("Page 2")
+            text: qsTr("Joystick Check")
+        }
+        TabButton {
+            text: qsTr("Virtual Joy")
         }
     }
 }

@@ -10,6 +10,10 @@ ApplicationWindow {
     height: 600
     title: qsTr("Tocabi Controller")
 
+    //    SwipeView {
+    //        id: swipeView2
+    //        anchors.fill: parent
+    //        currentIndex: tabBar.currentIndex
 
     SwipeView{
         id: swipeView

@@ -98,16 +98,15 @@ Page {
         }
     }
 
-
-    Timer{
-        id:timer1
+    Timer {
+        id: timer1
         interval: 16
-        repeat:true
+        repeat: true
         running: true
         triggeredOnStart: true
 
         onTriggered: {
-            ros.update();
+            ros.update()
         }
     }
 
@@ -1023,7 +1022,7 @@ Page {
         y: 42
         text: qsTr("Gravity")
         onClicked: {
-            ros.button_ros(0,"gravity");
+            ros.button_ros(0, "gravity")
         }
     }
 
@@ -1033,10 +1032,11 @@ Page {
         y: 42
         text: qsTr("Task")
         onClicked: {
-            ros.button_ros(1,"task");
+
+            ros.button_ros(1, "task")
         }
     }
-    
+
     Text {
         id: text10
         x: 613
@@ -1045,15 +1045,13 @@ Page {
         font.pixelSize: 12
     }
 
-
     TabBar {
         id: tabBar
         x: 848
         y: 42
         width: 162
         height: 40
-        currentIndex: swipeView1.currentIndex
-        
+        currentIndex: swipeView.currentIndex
 
         TabButton {
             text: 'test 1 '
