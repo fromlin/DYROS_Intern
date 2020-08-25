@@ -529,9 +529,9 @@ public:
         case 2:     // righthand
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
             velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -4.);  //righthand pos
+            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -10.);  //righthand pos
             if(msg->buttons[4])
-                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 4.);              
+                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 10.);              
 
 
             velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
@@ -546,9 +546,9 @@ public:
         case 3:     // lefthand
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
             velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -4.);  //lefthand pos
+            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -10.);  //lefthand pos
             if(msg->buttons[4])
-                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 4.);
+                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 10.);
 
 
             velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
