@@ -94,7 +94,7 @@ Page {
                                     stick1.x = totalArea1.width / 2 - stick1.radius
                                     stick1.y = totalArea1.height / 2 - stick1.radius
                                     ros.virjoy(stick1.x , stick1.y, 0)
-                                    
+
                                     leftjoyStick.released()
                                 }
             }
@@ -207,7 +207,7 @@ Page {
 
     Frame {
         id: frame
-        x: 45
+        x: 120
         y: 107
         width: 200
         height: 200
@@ -224,7 +224,6 @@ Page {
             anchors.left: parent.left
             anchors.leftMargin: 8
             background: Rectangle {
-                //radius: button.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -244,7 +243,6 @@ Page {
             anchors.right: parent.right
             anchors.rightMargin: 8
             background: Rectangle {
-                //radius: button1.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -263,7 +261,6 @@ Page {
             anchors.top: parent.top
             anchors.topMargin: 8
             background: Rectangle {
-                //radius: button2.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -281,7 +278,6 @@ Page {
             anchors.bottomMargin: 8
             anchors.horizontalCenter: parent.horizontalCenter
             background: Rectangle {
-                //radius: button3.radius
                 border.color: "#000000"
                 border.width: 3
                 opacity: 0.5
@@ -379,12 +375,13 @@ Page {
 
     Frame {
         id: frame2
-        x: 779
+        x: 700
         y: 125
         width: 200
         height: 200
         anchors.verticalCenterOffset: 0
         anchors.verticalCenter: frame1.verticalCenter
+        anchors.rightMargin: 40
         font.pointSize: 11
 
         RoundButton {
@@ -468,40 +465,50 @@ Page {
 
     Frame {
         id: frame3
-        y: 19
-        height: 74
+        y: 110
+        height: 200
         anchors.left: parent.left
         anchors.leftMargin: 30
-        anchors.right: parent.right
-        anchors.rightMargin: 30
+
 
         Slider {
             id: slider
             y: 13
             width: 40
-            height: 230
+            height: 200
             orientation: Qt.Vertical
             from: -1
             anchors.left: parent.left
             anchors.leftMargin: 10
             value: 0
             anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             stepSize : 0.01
             snapMode: Slider.SnapOnRelease
-            
+
             pressed: true
 
             onValueChanged:
             ros.virjoy(value,0,4)
 
         }
+    }
+
+
+    Frame {
+        id: frame33
+        y: 110
+        height: 200
+        anchors.right: parent.right
+        anchors.rightMargin: 30
+        
 
         Slider {
             id: slider1
-            x: 863
-            y: 11
+            // x: 0
+            y: 13
             width: 40
-            height: 230
+            height: 200
             orientation: Qt.Vertical
             from: -1
             anchors.right: parent.right
