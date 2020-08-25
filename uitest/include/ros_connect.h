@@ -338,8 +338,8 @@ public:
 
     void joystick_cb(const sensor_msgs::Joy::Ptr &msg)
     {
-        if((msg->axes[4] == 0.0) || (msg->axes[5] == 0.0)){
-            msg->axes[4] = 1.0;
+        if((msg->axes[3] == 0.0) || (msg->axes[5] == 0.0)){
+            msg->axes[3] = 1.0;
             msg->axes[5] = 1.0;
         } //axes value of message(joy) initializing
 
@@ -483,12 +483,12 @@ public:
         case 0:     // pos : COM rot : pelv 
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 20.;
             velcmd_msg.des_vel[1] = (double)msg->axes[0] / 20.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -40.);  //com pos
+            velcmd_msg.des_vel[2] = (((double)msg->axes[3] - 1.) / -40.);  //com pos
             if(msg->buttons[4])
-                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 40.);
+                velcmd_msg.des_vel[2] = (((double)msg->axes[3] - 1.) / 40.);
 
-            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -4.;
-            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 4.;
+            velcmd_msg.des_vel[3] = (double)msg->axes[4] / -4.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[2] / 4.;
             velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / -8.);  //pelv rot
             if(msg->buttons[5])
                 velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / 8.);              
@@ -500,8 +500,8 @@ public:
             velcmd_msg.des_vel[0] = 0;
             velcmd_msg.des_vel[1] = 0;
             velcmd_msg.des_vel[2] = 0;
-            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
-            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            velcmd_msg.des_vel[3] = (double)msg->axes[4] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[2] / 2.;
             velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / 4.);  //upperbody rot
             if(msg->buttons[5])
                 velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / -4.);
@@ -512,13 +512,13 @@ public:
         case 2:     // righthand
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
             velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -4.);  //righthand pos
+            velcmd_msg.des_vel[2] = (((double)msg->axes[3] - 1.) / -4.);  //righthand pos
             if(msg->buttons[4])
-                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 4.);              
+                velcmd_msg.des_vel[2] = (((double)msg->axes[3] - 1.) / 4.);              
 
 
-            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
-            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            velcmd_msg.des_vel[3] = (double)msg->axes[4] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[2] / 2.;
             velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / 4.);  //righthand rot
             if(msg->buttons[5])
                 velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / -4.);                
@@ -529,13 +529,13 @@ public:
         case 3:     // lefthand
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 2.;
             velcmd_msg.des_vel[1] = (double)msg->axes[0] / 2.;
-            velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / -4.);  //lefthand pos
+            velcmd_msg.des_vel[2] = (((double)msg->axes[3] - 1.) / -4.);  //lefthand pos
             if(msg->buttons[4])
-                velcmd_msg.des_vel[2] = (((double)msg->axes[4] - 1.) / 4.);
+                velcmd_msg.des_vel[2] = (((double)msg->axes[3] - 1.) / 4.);
 
 
-            velcmd_msg.des_vel[3] = (double)msg->axes[2] / -2.;
-            velcmd_msg.des_vel[4] = (double)msg->axes[3] / 2.;
+            velcmd_msg.des_vel[3] = (double)msg->axes[4] / -2.;
+            velcmd_msg.des_vel[4] = (double)msg->axes[2] / 2.;
             velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / 4.);  //lefthand rot
             if(msg->buttons[5])
                 velcmd_msg.des_vel[5] = (((double)msg->axes[5] - 1.) / -4.);
