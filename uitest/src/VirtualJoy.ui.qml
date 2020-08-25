@@ -148,7 +148,6 @@ Page {
                 y: totalArea2.height / 2 - radius
                 color: "black"
             }
-
             MouseArea {
                 id: mouseArea2
                 anchors.fill: parent
@@ -198,6 +197,8 @@ Page {
                                     rightjoyStick.released()
                                 }
             }
+
+           
 
             //            onDirChanged: {
             //                changeDirection(direction)
@@ -485,7 +486,14 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             stepSize : 0.01
             snapMode: Slider.SnapOnRelease
-
+            onPressedChanged: {
+                    if(pressed){}
+                    else
+                        {slider.value = 0
+                         ros.virjoy(value,0,4)}
+            }
+            
+            
             pressed: true
 
             onValueChanged:
@@ -514,10 +522,16 @@ Page {
             anchors.right: parent.right
             anchors.rightMargin: 10
             anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             value: 0
             stepSize: 0.01
             snapMode: Slider.SnapOnRelease
-
+            onPressedChanged: {
+                    if(pressed){}
+                    else
+                        {slider1.value = 0
+                         ros.virjoy(value,0,5)}
+            }
             onValueChanged:
             ros.virjoy(value,0,5)
         }
