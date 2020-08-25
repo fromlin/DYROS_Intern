@@ -17,7 +17,7 @@ Page {
         font.pointSize: 20
 
         onClicked: {
-            ros.button_ros(0, "Initialize All")
+            ros.button_ros(0, "ecatinit")
         }
     }
 
@@ -32,7 +32,7 @@ Page {
         highlighted: false
         checked: false
         onClicked: {
-            ros.button_ros(0, "Initialize Lower")
+            ros.button_ros(0, "ecatinitlower")
         }
     }
 
@@ -47,7 +47,7 @@ Page {
         highlighted: false
         checked: false
         onClicked: {
-            ros.button_ros(0, "Safety Reset")
+            ros.button_ros(0, "safetyreset")
         }
     }
 
@@ -62,7 +62,7 @@ Page {
         highlighted: false
         checked: false
         onClicked: {
-            ros.button_ros(0, "Disable Safety")
+            ros.button_ros(0, "safetydisable")
         }
     }
 
@@ -77,7 +77,7 @@ Page {
         highlighted: false
         checked: false
         onClicked: {
-            ros.button_ros(0, "FT Calibration")
+            ros.button_ros(0, "ftcalib")
         }
     }
 
@@ -92,7 +92,7 @@ Page {
         highlighted: false
         checked: false
         onClicked: {
-            ros.button_ros(0, "IMU EF Reset")
+            ros.button_ros(0, "imureset")
         }
     }
 }
