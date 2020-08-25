@@ -77,7 +77,7 @@ public:
     
     Q_INVOKABLE void vir_StateInitHandle()
     {
-        StateInitHandle();
+        // StateInitHandle();
     }
     Q_INVOKABLE void vir_TaskHandle()
     {
@@ -413,8 +413,10 @@ public:
         }
 
         if (msg->buttons[6])
-            StateInitHandle();
+            Torqueon();
         if (msg->buttons[7])
+            Torqueoff();   
+        if (msg->buttons[0])
             TaskHandle();
         if(msg->buttons[8])
             EmergencyOff();
@@ -454,11 +456,20 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    void StateInitHandle()
+    void Torqueon()
     {
-        com_msg.data = std::string("simvirtualjoint");
+        // com_msg.data = std::string("simvirtualjoint");
+        // com_pub.publish(com_msg);
+        com_msg.data = std::string("torqueon");
         com_pub.publish(com_msg);
     }
+
+    void Torqueoff()
+    {
+        com_msg.data = std::string("torqueoff");
+        com_pub.publish(com_msg);
+    }
+
     void EmergencyOff()
     {
         com_msg.data = std::string("emergencyoff");

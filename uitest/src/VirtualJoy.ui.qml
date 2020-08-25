@@ -290,10 +290,10 @@ Page {
     Frame {
         id: frame1
         x: 357
-        y: 136
+        y: 128
         width: 310
         height: 151
-        anchors.horizontalCenterOffset: 0
+        anchors.horizontalCenterOffset: 220
         anchors.horizontalCenter: parent.horizontalCenter
 
         RoundButton {
@@ -374,95 +374,6 @@ Page {
         }
     }
 
-    Frame {
-        id: frame2
-        x: 700
-        y: 125
-        width: 200
-        height: 200
-        anchors.verticalCenterOffset: 0
-        anchors.verticalCenter: frame1.verticalCenter
-        anchors.rightMargin: 40
-        font.pointSize: 11
-
-        RoundButton {
-            id: roundButton3
-            x: 72
-            y: 123
-            width: 50
-            height: 50
-            checkable: false
-            font.bold: true
-            font.pointSize: 13
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 8
-            background: Rectangle {
-                radius: roundButton3.radius
-                color: "#13aa04"
-
-                onClipChanged: ColorAnimation {
-                    from: "#13aa04"
-                    to: "black"
-                    duration: 200
-                }
-            }
-        }
-
-        RoundButton {
-            id: roundButton4
-            x: 63
-            y: 58
-            width: 50
-            height: 50
-            checkable: false
-            font.bold: true
-            font.pointSize: 13
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 8
-            background: Rectangle {
-                radius: roundButton4.radius
-                color: "#e22503"
-            }
-        }
-
-        RoundButton {
-            id: roundButton5
-            y: 58
-            width: 50
-            height: 50
-            checkable: false
-            font.bold: true
-            font.pointSize: 13
-            anchors.verticalCenterOffset: 0
-            anchors.left: parent.left
-            anchors.leftMargin: 8
-            anchors.verticalCenter: parent.verticalCenter
-            background: Rectangle {
-                radius: roundButton5.radius
-                color: "#025aeb"
-            }
-        }
-
-        RoundButton {
-            id: roundButton6
-            x: 73
-            width: 50
-            height: 50
-            checkable: false
-            font.bold: true
-            font.pointSize: 13
-            anchors.top: parent.top
-            anchors.topMargin: 8
-            anchors.horizontalCenterOffset: 0
-            anchors.horizontalCenter: parent.horizontalCenter
-            background: Rectangle {
-                radius: roundButton6.radius
-                color: "#e2bc03"
-            }
-        }
-    }
 
     Frame {
         id: frame3
@@ -504,7 +415,7 @@ Page {
 
 
     Frame {
-        id: frame33
+        id: frame5
         y: 110
         height: 200
         anchors.right: parent.right
@@ -534,6 +445,30 @@ Page {
             }
             onValueChanged:
             ros.virjoy(value,0,5)
+        }
+    }
+
+    Button {
+        id: button4
+        x: 380
+        y: 140
+        width: 140
+        height: 56
+        text: qsTr("Torque On")
+        onClicked: {
+            ros.button_ros(0, "torqueon")
+        }
+    }
+
+    Button {
+        id: button5
+        x: 380
+        y: 220
+        width: 140
+        height: 56
+        text: qsTr("Torque OFf")
+        onClicked: {
+            ros.button_ros(0, "torqueoff")
         }
     }
 
