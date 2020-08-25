@@ -126,9 +126,9 @@ public:
             velcmd_msg.des_vel[0] = 0;
             velcmd_msg.des_vel[1] = 0;
             velcmd_msg.des_vel[2] = 0;
-            velcmd_msg.des_vel[3] = axes[2] / 2.;
-            velcmd_msg.des_vel[4] = axes[3] / -2.;
-            velcmd_msg.des_vel[5] = ((axes[5]) / -4.);  //upperbody rot
+            velcmd_msg.des_vel[3] = axes[2] / 4.;
+            velcmd_msg.des_vel[4] = axes[3] / -4.;
+            velcmd_msg.des_vel[5] = ((axes[5]) / -8.);  //upperbody rot
             // if(msg->buttons[5])
             //     velcmd_msg.des_vel[5] = ((axes[5] - 1.) / -4.);
             break;
