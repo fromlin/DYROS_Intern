@@ -337,11 +337,19 @@ public:
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
     void joystick_cb(const sensor_msgs::Joy::Ptr &msg)
-    {
-        if((msg->axes[4] == 0.0) || (msg->axes[5] == 0.0)){
+    
+    {   velcmd_msg.des_vel.resize(6);
+        if((msg->axes[4] == 0. || (msg->axes[5] == 0.))){
             msg->axes[4] = 1.0;
             msg->axes[5] = 1.0;
-        } //axes value of message(joy) initializing
+        } //axes value of message(joy) initializing (axes4 axes5 no Threshold isssue)
+        for ( int i = 0; i<4 ; i++)
+        {
+            if(abs(msg->axes[i]) <= 0.15) // value of Threshold
+            {
+                msg->axes[i] = 0;
+            }
+        }  //Setting Threshold value 
 
         char buf[128];
         char buf2[128];
@@ -495,7 +503,7 @@ public:
     void VelocityHandle(const sensor_msgs::Joy::ConstPtr& msg)
     {
         velcmd_msg.des_vel.resize(6);
-
+        
         switch (velcmd_msg.task_link) {
         case 0:     // pos : COM rot : pelv 
             velcmd_msg.des_vel[0] = (double)msg->axes[1] / 20.;
