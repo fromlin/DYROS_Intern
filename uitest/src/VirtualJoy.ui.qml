@@ -231,7 +231,7 @@ Page {
                 color: "gray"
             }
             onClicked:
-            ros.click_ros("left")
+                ros.click_ros("left")
         }
 
         Button {
@@ -289,11 +289,9 @@ Page {
 
     Frame {
         id: frame1
-        x: 357
         y: 128
         width: 310
         height: 151
-        anchors.horizontalCenterOffset: 220
         anchors.horizontalCenter: parent.horizontalCenter
 
         RoundButton {
@@ -314,8 +312,9 @@ Page {
                 border.color: "#30f13e"
                 color: "#dcded8"
             }
-            onClicked:
-            ros.vir_EmergencyOff()
+            onClicked: {
+                ros.button_ros(0, "emergencyoff")
+            }
 
             Text {
                 id: element
@@ -346,9 +345,16 @@ Page {
                 opacity: 0.5
                 color: "gray"
             }
-            onClicked:
-            ros.vir_StateInitHandle()
-
+            Text {
+                id: element1
+                text: qsTr("ON")
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 20
+            }
+            onClicked: {
+                ros.button_ros(0, "torqueon")
+            }
         }
 
         RoundButton {
@@ -368,26 +374,138 @@ Page {
                 opacity: 0.5
                 color: "gray"
             }
-            onClicked:
-            ros.vir_TaskHandle()
+            Text {
+                id: element2
+                text: qsTr("OFF")
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                font.pixelSize: 20
+            }
+            onClicked: {
+                ros.button_ros(0, "torqueoff")
+            }
+        }
+    }
 
+    Frame {
+        id: frame2
+        x: 700
+        y: 125
+        width: 200
+        height: 200
+        anchors.verticalCenter: frame1.verticalCenter
+        font.pointSize: 11
+
+        RoundButton {
+            id: roundButton3
+            x: 72
+            y: 123
+            width: 50
+            height: 50
+            checkable: false
+            font.bold: true
+            font.pointSize: 13
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 8
+            background: Rectangle {
+                radius: roundButton3.radius
+                color: "#13aa04"
+            }
+            Text {
+                id: element3
+                text: qsTr("M9")
+                horizontalAlignment: Text.AlignHCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 20
+            }
+            onClicked:
+                ros.vir_TaskHandle()           
+        }
+
+        RoundButton {
+            id: roundButton4
+            x: 63
+            y: 58
+            width: 50
+            height: 50
+            checkable: false
+            font.bold: true
+            font.pointSize: 13
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            background: Rectangle {
+                radius: roundButton4.radius
+                color: "#e22503"
+            }
+            Text {
+                id: element4
+                text: qsTr("Sim")
+                horizontalAlignment: Text.AlignHCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 20
+            }
+            onClicked: {
+                ros.button_ros(0, "simvirtualjoint")
+            }            
+        }
+
+        RoundButton {
+            id: roundButton5
+            y: 58
+            width: 50
+            height: 50
+            checkable: false
+            font.bold: true
+            font.pointSize: 13
+            anchors.verticalCenterOffset: 0
+            anchors.left: parent.left
+            anchors.leftMargin: 8
+            anchors.verticalCenter: parent.verticalCenter
+            background: Rectangle {
+                radius: roundButton5.radius
+                color: "#025aeb"
+            }
+        }
+
+        RoundButton {
+            id: roundButton6
+            x: 73
+            width: 50
+            height: 50
+            checkable: false
+            font.bold: true
+            font.pointSize: 13
+            anchors.top: parent.top
+            anchors.topMargin: 8
+            anchors.horizontalCenterOffset: 0
+            anchors.horizontalCenter: parent.horizontalCenter
+            background: Rectangle {
+                radius: roundButton6.radius
+                color: "#e2bc03"
+            }
         }
     }
 
 
     Frame {
         id: frame3
-        y: 110
-        height: 200
+        y: 19
+        height: 312
         anchors.left: parent.left
         anchors.leftMargin: 30
 
 
         Slider {
             id: slider
-            y: 13
+            y: 66
             width: 40
-            height: 200
+            height: 156
+            scale: 2
+            font.pointSize: 11
             orientation: Qt.Vertical
             from: -1
             anchors.left: parent.left
@@ -408,7 +526,7 @@ Page {
             pressed: true
 
             onValueChanged:
-            ros.virjoy(value,0,4)
+                ros.virjoy(value,0,4)
 
         }
     }
@@ -416,18 +534,19 @@ Page {
 
     Frame {
         id: frame5
-        y: 110
-        height: 200
+        y: 19
+        height: 312
         anchors.right: parent.right
         anchors.rightMargin: 30
         
 
         Slider {
             id: slider1
-            // x: 0
-            y: 13
+            x: 892
+            y: 66
             width: 40
-            height: 200
+            height: 156
+            scale: 2
             orientation: Qt.Vertical
             from: -1
             anchors.right: parent.right
@@ -444,31 +563,7 @@ Page {
                          ros.virjoy(value,0,5)}
             }
             onValueChanged:
-            ros.virjoy(value,0,5)
-        }
-    }
-
-    Button {
-        id: button4
-        x: 380
-        y: 140
-        width: 140
-        height: 56
-        text: qsTr("Torque On")
-        onClicked: {
-            ros.button_ros(0, "torqueon")
-        }
-    }
-
-    Button {
-        id: button5
-        x: 380
-        y: 220
-        width: 140
-        height: 56
-        text: qsTr("Torque OFf")
-        onClicked: {
-            ros.button_ros(0, "torqueoff")
+                ros.virjoy(value,0,5)
         }
     }
 
