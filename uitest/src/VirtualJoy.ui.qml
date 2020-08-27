@@ -599,6 +599,24 @@ Page {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 10
+        Rectangle {
+                id: totalArea1y6
+                color: "gray"
+                radius: parent.width / 2
+                opacity: 0.5
+                width: parent.width
+                height: parent.height
+                Text{
+                text: qsTr("Mode : 0")
+            // x: 214
+            // y: 96
+            // text: qsTr("000.000")
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            objectName: "mode"
+            font.pixelSize: 30
+                }
+            }
     }
 }
 

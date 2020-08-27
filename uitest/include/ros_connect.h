@@ -601,8 +601,14 @@ public:
         mode_index -= data;
         if(mode_index > 3)      mode_index = 0;
         if(mode_index < 0)      mode_index = 3;
+        char buf[50];
+        
+        std::sprintf(buf, "Mode : %d", mode_index);
+       
+        m_Q->findChild<QObject *>("mode")->setProperty("text", buf);
         velcmd_msg.task_link = change_mode[mode_index];
     }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
