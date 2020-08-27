@@ -190,20 +190,76 @@ public:
     void joint_cb(sensor_msgs::JointStateConstPtr msg){
         char buf[128];
         char buf2[128];
+        float dot;
 
-        for (int i = 0; i < 31; i++){
-            std::sprintf(buf, "%8.3f", msg->effort[i]);
-            std::sprintf(buf2, "t%d", i + 1);
+        // Left Arm
+        for (int i = 15; i < 23; i++){
+            dot = msg->position[i] * 50.0;
+            std::sprintf(buf, "%8.3f", dot);
+            std::sprintf(buf2, "t%d", i + 4);
             m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
 
-            std::sprintf(buf, "#%02X0000", (int)(pp(msg->effort[i]) * 256.0));
+            std::sprintf(buf, "#%02X0000", (int)(pp(dot) * 256.0));
             m_Q->findChild<QObject *>(buf2)->setProperty("color", buf);
 
-            std::sprintf(buf2, "p%d", i + 1);
-            m_Q->findChild<QObject *>(buf2)->setProperty("value", pp(msg->effort[i]));
+            std::sprintf(buf2, "p%d", i - 2);
+            m_Q->findChild<QObject *>(buf2)->setProperty("value", pp(dot));
         }
 
-        for (int i = 0; i < 31; i++){
+        // Right Arm
+        for (int i = 25; i < 33; i++){
+            dot = msg->position[i] * 50.0;
+            std::sprintf(buf, "%8.3f", dot);
+            std::sprintf(buf2, "t%d", i - 12);
+            m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
+
+            std::sprintf(buf, "#%02X0000", (int)(pp(dot) * 256.0));
+            m_Q->findChild<QObject *>(buf2)->setProperty("color", buf);
+
+            std::sprintf(buf2, "p%d", i - 6);
+            m_Q->findChild<QObject *>(buf2)->setProperty("value", pp(dot));
+        }
+
+        // Left Leg
+        for (int i = 0; i < 6; i++){
+            dot = msg->position[i] * 50.0;
+            std::sprintf(buf, "%8.3f", dot);
+            std::sprintf(buf2, "t%d", i + 7);
+            m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
+
+            std::sprintf(buf, "#%02X0000", (int)(pp(dot) * 256.0));
+            m_Q->findChild<QObject *>(buf2)->setProperty("color", buf);
+
+            std::sprintf(buf2, "p%d", i + 7);
+            m_Q->findChild<QObject *>(buf2)->setProperty("value", pp(dot));
+        }
+
+        // Right Leg
+        for (int i = 6; i < 12; i++){
+            dot = msg->position[i] * 50.0;
+            std::sprintf(buf, "%8.3f", dot);
+            std::sprintf(buf2, "t%d", i - 5);
+            m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
+
+            std::sprintf(buf, "#%02X0000", (int)(pp(dot) * 256.0));
+            m_Q->findChild<QObject *>(buf2)->setProperty("color", buf);
+
+            std::sprintf(buf2, "p%d", i - 5);
+            m_Q->findChild<QObject *>(buf2)->setProperty("value", pp(dot));
+        }
+
+        // Waist + Upper body
+        for (int i = 12; i < 15; i++){
+            dot = msg->position[i] * 50.0;
+            std::sprintf(buf, "%8.3f", dot);
+            std::sprintf(buf2, "t%d", i + 17);
+            m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
+
+            std::sprintf(buf, "#%02X0000", (int)(pp(dot) * 256.0));
+            m_Q->findChild<QObject *>(buf2)->setProperty("color", buf);
+
+            std::sprintf(buf2, "p%d", i + 17);
+            m_Q->findChild<QObject *>(buf2)->setProperty("value", pp(dot));
         }
     };
 
