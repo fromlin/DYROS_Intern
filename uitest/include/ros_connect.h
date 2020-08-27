@@ -80,23 +80,23 @@ public:
     {
         TaskHandle();
     }
-    Q_INVOKABLE void rmmodxpad()
-    {   
-        std::string str = "rmmod xpad";
-        const char *c = str.c_str();
-        system(c);
-    }
+     Q_INVOKABLE void rmmodxpad()
+     {   
+    //     std::string str = "rmmod xpad";
+    //     const char *c = str.c_str();
+    //     system(c);
+     }
     Q_INVOKABLE void joyconfig()
-    {
-        // std::string str = "xboxdrv --config /usr/share/doc/xboxdrv/examples/default.xboxdrv";
-        std::string str1 = "cd /home/dyros_raspi/xow";
-        std::string str2 = "./xow";
+     {
+    //     // std::string str = "xboxdrv --config /usr/share/doc/xboxdrv/examples/default.xboxdrv";
+    //     std::string str1 = "cd /home/dyros_raspi/xow";
+    //     std::string str2 = "./xow";
 
-        const char *c1 = str1.c_str();
-        const char *c2 = str2.c_str();
-        system(c1);
-        system(c2);
-    }
+    //     const char *c1 = str1.c_str();
+    //     const char *c2 = str2.c_str();
+    //     system(c1);
+    //     system(c2);
+     }
     
     Q_INVOKABLE void virjoy(float x, float y, int i)
     {
