@@ -230,8 +230,6 @@ Page {
                 opacity: 0.5
                 color: "gray"
             }
-            onClicked:
-                ros.click_ros("left")
         }
 
         Button {
@@ -249,8 +247,7 @@ Page {
                 opacity: 0.5
                 color: "gray"
             }
-            onClicked:
-            ros.click_ros("right")
+        
         }
 
         Button {
@@ -267,6 +264,8 @@ Page {
                 opacity: 0.5
                 color: "gray"
             }
+            onClicked:
+            ros.click_ros("right")
         }
 
         Button {
@@ -284,6 +283,8 @@ Page {
                 opacity: 0.5
                 color: "gray"
             }
+            onClicked:
+            ros.click_ros("left")
         }
     }
 
