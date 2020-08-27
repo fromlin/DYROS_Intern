@@ -470,6 +470,17 @@ Page {
                 radius: roundButton5.radius
                 color: "#025aeb"
             }
+            Text {
+                id: element5
+                text: qsTr("RmMod")
+                horizontalAlignment: Text.AlignHCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 13
+            }
+            onClicked: {
+                ros.rmmodxpad()
+            }
         }
 
         RoundButton {
@@ -488,8 +499,19 @@ Page {
                 radius: roundButton6.radius
                 color: "#e2bc03"
             }
+            Text {
+                id: element6
+                text: qsTr("Config")
+                horizontalAlignment: Text.AlignHCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 15
+            }
+            onClicked: {
+                ros.joyconfig()}
+            }
         }
-    }
+    
 
 
     Frame {

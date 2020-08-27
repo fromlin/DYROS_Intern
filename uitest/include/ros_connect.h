@@ -7,7 +7,8 @@
 #include "SensorState.h"
 #include "Joy.h"
 #include "TaskCommand.h"
-
+#include "stdlib.h"
+#include "iostream"
 #include "geometry_msgs/Twist.h"
 #include "VelocityCommand.h"
 
@@ -78,6 +79,18 @@ public:
     Q_INVOKABLE void vir_TaskHandle()
     {
         TaskHandle();
+    }
+    Q_INVOKABLE void rmmodxpad()
+    {   
+        std::string str = "rmmod xpad";
+        const char *c = str.c_str();
+        system(c);
+    }
+    Q_INVOKABLE void joyconfig()
+    {
+        std::string str = "xboxdrv --config /usr/share/doc/xboxdrv/examples/default.xboxdrv";
+        const char *c1 = str.c_str();
+        system(c1);
     }
     
     Q_INVOKABLE void virjoy(float x, float y, int i)
