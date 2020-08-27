@@ -325,22 +325,28 @@ public:
     
     {   // default 0 (Not control both LT,RT yet) , 1 (Control LT only not RT), 2 (Control RT only not LT) , 3(Control LT RT Both)
          velcmd_msg.des_vel.resize(6);
+        sensor_msgs::Joy::Ptr Rightmsg;
+        Rightmsg = msg;
+        float temp[3] = {msg->axes[2], msg->axes[3], msg->axes[4]};
+        Rightmsg->axes[4] = temp[0];
+        Rightmsg->axes[2] = temp[1];
+        Rightmsg->axes[3] = temp[2];
 
          if(JoyFlag ==0){
-        if(abs(msg->axes[4]!= 0))
+        if(abs(Rightmsg->axes[4]!= 0))
             LTFlag = 1;
-        if(abs(msg->axes[5]!= 0))
+        if(abs(Rightmsg->axes[5]!= 0))
             RTFlag = 1;
-        if(LTFlag == 0) {msg->axes[4] = 1;}
-        if(RTFlag == 0) {msg->axes[5] = 1;}
+        if(LTFlag == 0) {Rightmsg->axes[4] = 1;}
+        if(RTFlag == 0) {Rightmsg->axes[5] = 1;}
         if(LTFlag == 1 && RTFlag ==0)
         {
-            msg->axes[5] = 1;
+            Rightmsg->axes[5] = 1;
             JoyFlag = 0; 
         }
         if(LTFlag == 0 && RTFlag == 1)
         {
-            msg->axes[4] = 1;
+            Rightmsg->axes[4] = 1;
             JoyFlag = 0;
         }
         if(LTFlag == 1 && RTFlag == 1)
@@ -352,9 +358,9 @@ public:
          
         for ( int i = 0; i<4 ; i++)
         {
-            if(abs(msg->axes[i]) <= 0.1) // value of Threshold
+            if(abs(Rightmsg->axes[i]) <= 0.1) // value of Threshold
             {
-                msg->axes[i] = 0;
+                Rightmsg->axes[i] = 0;
             }
         }  //Setting Threshold value 
 
@@ -365,7 +371,7 @@ public:
         // axes
         for (int i = 0; i < 4; i++)
         {
-            dot = msg->axes[i];
+            dot = Rightmsg->axes[i];
             if((i==1) || (i==3))    std::sprintf(buf, "%8.3f", dot);
             else                    std::sprintf(buf, "%8.3f", -dot);
             std::sprintf(buf2, "t%d", i + 46);
@@ -381,8 +387,8 @@ public:
 
         for (int i = 4; i < 6; i++)     //L2, R2
         {
-            if(msg->buttons[i])     dot = (msg->axes[i] / 2.0) - 0.5;
-            else                    dot = (msg->axes[i] / -2.0) + 0.5;
+            if(Rightmsg->buttons[i])     dot = (Rightmsg->axes[i] / 2.0) - 0.5;
+            else                    dot = (Rightmsg->axes[i] / -2.0) + 0.5;
             std::sprintf(buf, "%8.3f", dot);
             std::sprintf(buf2, "t%d", i + 46);
             m_Q->findChild<QObject *>(buf2)->setProperty("text", buf);
@@ -397,12 +403,12 @@ public:
         for (int i = 8; i < 10; i++)
         {
             std::sprintf(buf2, "b%d", i);
-            if (msg->axes[i - 2] > 0.5)
+            if (Rightmsg->axes[i - 2] > 0.5)
                 m_Q->findChild<QObject *>(buf2)->setProperty("checked", true);
             else
                 m_Q->findChild<QObject *>(buf2)->setProperty("checked", false);
             std::sprintf(buf2, "b%d", i + 2);
-            if (msg->axes[i - 2] < -0.5)
+            if (Rightmsg->axes[i - 2] < -0.5)
                 m_Q->findChild<QObject *>(buf2)->setProperty("checked", true);
             else
                 m_Q->findChild<QObject *>(buf2)->setProperty("checked", false);
@@ -412,7 +418,7 @@ public:
         for (int j = 0; j < 6; j++)
         {
             std::sprintf(buf, "b%d", j);
-            if (msg->buttons[j])
+            if (Rightmsg->buttons[j])
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", true);
             else
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
@@ -421,27 +427,27 @@ public:
         for (int j = 12; j < 17; j++)
         {
             std::sprintf(buf, "b%d", j);
-            if (msg->buttons[j - 6])
+            if (Rightmsg->buttons[j - 6])
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", true);
             else
                 m_Q->findChild<QObject *>(buf)->setProperty("checked", false);
         }
 
-        if (msg->buttons[6])
+        if (Rightmsg->buttons[6])
             Torqueon();
-        if (msg->buttons[7])
+        if (Rightmsg->buttons[7])
             Torqueoff();   
-        if (msg->buttons[0])
+        if (Rightmsg->buttons[0])
             TaskHandle();
-        if (msg->buttons[1])
+        if (Rightmsg->buttons[1])
             VirtualInitHandle();
-        if(msg->buttons[8])
+        if(Rightmsg->buttons[8])
             EmergencyOff();
-        if (msg->axes[7] != 0) {
-            if (msg->axes[7] > 0)       ChangeConMode(-1);
-            else if (msg->axes[7] < 0)   ChangeConMode(1);
+        if (Rightmsg->axes[7] != 0) {
+            if (Rightmsg->axes[7] > 0)       ChangeConMode(-1);
+            else if (Rightmsg->axes[7] < 0)   ChangeConMode(1);
         }
-        VelocityHandle(msg);
+        VelocityHandle(Rightmsg);
     };
 
 
